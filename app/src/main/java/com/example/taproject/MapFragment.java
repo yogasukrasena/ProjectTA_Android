@@ -30,7 +30,7 @@ public class MapFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        databaseReference = database.getReference("Device_9C:9C:1F:47:B4:FA");
+        databaseReference = database.getReference("Device_50:02:91:C9:DF:C4");
 
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override

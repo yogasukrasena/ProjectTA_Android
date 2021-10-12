@@ -53,7 +53,7 @@
                 android:layout_width="250dp"
                 android:layout_height="50dp"
                 android:layout_marginLeft="75dp"
-                android:layout_marginTop="110dp"
+                android:layout_marginTop="115dp"
                 android:fontFamily="@font/montserratlight"
                 android:hint="Keluarga"
                 android:inputType="text"
@@ -63,7 +63,7 @@
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:layout_marginLeft="40dp"
-                android:layout_marginTop="125dp"
+                android:layout_marginTop="130dp"
                 android:alpha="0.4"
                 android:src="@drawable/user" />
 
@@ -72,7 +72,7 @@
                 android:layout_width="250dp"
                 android:layout_height="50dp"
                 android:layout_marginLeft="75dp"
-                android:layout_marginTop="160dp"
+                android:layout_marginTop="170dp"
                 android:fontFamily="@font/montserratlight"
                 android:hint="Kapasitas Baterai"
                 android:inputType="text"
@@ -82,7 +82,7 @@
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:layout_marginLeft="40dp"
-                android:layout_marginTop="175dp"
+                android:layout_marginTop="190dp"
                 android:alpha="0.4"
                 android:src="@drawable/battery_setting" />
 
@@ -91,7 +91,7 @@
                 android:layout_width="245dp"
                 android:layout_height="40dp"
                 android:layout_marginLeft="80dp"
-                android:layout_marginTop="215dp"
+                android:layout_marginTop="230dp"
                 android:fontFamily="@font/montserratlight"
                 android:gravity="center_vertical"
                 android:text="@string/fingger"
@@ -101,7 +101,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="305dp"
-                android:layout_marginTop="225dp"
+                android:layout_marginTop="240dp"
                 android:fontFamily="@font/montserratlight"
                 android:text=">"
                 android:textSize="30px" />
@@ -110,15 +110,16 @@
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:layout_marginLeft="40dp"
-                android:layout_marginTop="225dp"
+                android:layout_marginTop="240dp"
                 android:alpha="0.4"
                 android:src="@drawable/fingerprint" />
 
             <androidx.cardview.widget.CardView
+                android:id="@+id/submit"
                 android:layout_width="120dp"
                 android:layout_height="40dp"
                 android:layout_marginLeft="50dp"
-                android:layout_marginTop="270dp"
+                android:layout_marginTop="290dp"
                 app:cardBackgroundColor="@color/biru_submit"
                 app:cardCornerRadius="10dp">
 
@@ -134,10 +135,11 @@
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
+                android:id="@+id/cancel"
                 android:layout_width="120dp"
                 android:layout_height="40dp"
                 android:layout_marginLeft="190dp"
-                android:layout_marginTop="270dp"
+                android:layout_marginTop="290dp"
                 app:cardBackgroundColor="@color/gray_pekat"
                 app:cardCornerRadius="10dp">
 
@@ -152,34 +154,32 @@
 
             </androidx.cardview.widget.CardView>
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="330dp"
-                android:fontFamily="@font/montserratmedium"
-                android:gravity="center"
-                android:text="@string/supoort"
-                android:textColor="@color/gray"
-                android:textSize="30px" />
-
             <ImageView
-                android:layout_width="70dp"
-                android:layout_height="50dp"
-                android:layout_marginLeft="100dp"
-                android:layout_marginTop="350dp"
+                android:id="@+id/arduino_logo"
+                android:layout_width="50dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="185dp"
+                android:layout_marginLeft="185dp"
+                android:layout_marginTop="355dp"
                 android:src="@drawable/arduino_logo" />
 
-            <ImageView
-                android:layout_width="70dp"
-                android:layout_height="50dp"
-                android:layout_marginLeft="180dp"
-                android:layout_marginTop="350dp"
-                android:src="@drawable/esp8266" />
+            <TextView
+                android:id="@+id/text_power"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="115dp"
+                android:layout_marginLeft="115dp"
+                android:layout_marginTop="360dp"
+                android:fontFamily="@font/montserratregular"
+                android:text="@string/powerby"
+                android:textColor="@color/gray_pekat"
+                android:textSize="12sp" />
 
         </androidx.cardview.widget.CardView>
     </FrameLayout>
 
     <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/foto_profile"
         android:layout_width="100dp"
         android:layout_height="100dp"
         app:layout_constraintEnd_toEndOf="parent"

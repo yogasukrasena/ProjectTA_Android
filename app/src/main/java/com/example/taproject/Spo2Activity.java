@@ -49,7 +49,7 @@ public class Spo2Activity extends AppCompatActivity {
     }
     
     void addData(){
-        databaseReference = database.getReference("Device_9C:9C:1F:47:B4:FA");
+        databaseReference = database.getReference("Device_50:02:91:C9:DF:C4");
         final DatabaseReference datahasil = databaseReference.child("log_data");
         datahasil.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override

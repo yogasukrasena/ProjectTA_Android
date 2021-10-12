@@ -27,33 +27,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="80dp"
-                android:layout_marginTop="540dp"
-                app:cardBackgroundColor="@color/blue"
-                android:layout_toEndOf="@id/mainLayout2"
-                android:layout_toRightOf="@+id/mainLayout2"
-                tools:ignore="NotSibling">
-
-                <ImageView
-                    android:layout_width="50dp"
-                    android:layout_height="30dp"
-                    android:layout_marginStart="180dp"
-                    android:layout_marginLeft="180dp"
-                    android:layout_marginTop="45dp"
-                    android:src="@drawable/arduino_logo" />
-
-                <ImageView
-                    android:layout_width="50dp"
-                    android:layout_height="30dp"
-                    android:layout_marginStart="120dp"
-                    android:layout_marginLeft="120dp"
-                    android:layout_marginTop="45dp"
-                    android:src="@drawable/esp8266" />
-
-            </androidx.cardview.widget.CardView>
-
             <FrameLayout
                 android:id="@+id/frameMaps"
                 android:layout_width="match_parent"
@@ -89,417 +62,459 @@
 
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
-                android:layout_height="345dp"
+                android:layout_height="500dp"
                 app:cardBackgroundColor="@color/white"
                 app:cardCornerRadius="30dp"
                 android:layout_marginTop="-30dp"
+                android:layout_marginBottom="-30dp"
                 android:layout_below="@id/frameMaps">
 
-                <androidx.constraintlayout.widget.ConstraintLayout
+                <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+                    android:id="@+id/pullToRefreshMain"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
-                    <de.hdodenhof.circleimageview.CircleImageView
-                        android:id="@+id/circleImageView"
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"
-                        android:src="@drawable/man"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.084"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintVertical_bias="0.059" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/montserratregular"
-                        android:text="@string/welcome"
-                        android:textSize="20sp"
-                        app:layout_constraintBottom_toTopOf="@+id/namaKeluarga"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.204"
-                        app:layout_constraintStart_toEndOf="@+id/circleImageView"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintVertical_bias="1.0" />
-
-                    <TextView
-                        android:id="@+id/namaKeluarga"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="50dp"
-                        android:layout_marginLeft="20dp"
-                        android:layout_marginStart="20dp"
-                        android:fontFamily="@font/montserratbold"
-                        android:text="@string/user"
-                        android:textColor="@color/biru_name"
-                        android:textSize="22sp"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintLeft_toRightOf="@+id/circleImageView" />
-
-                    <TextView
-                        android:id="@+id/textView2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="85dp"
-                        android:fontFamily="@font/montserratlight"
-                        android:text="Mari Pantau"
-                        android:textSize="12sp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.11"
-                        app:layout_constraintStart_toEndOf="@+id/circleImageView"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <TextView
-                        android:id="@+id/namaPengguna"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="85dp"
-                        android:fontFamily="@font/montserratsemibold"
-                        android:text="@string/toolsuser"
-                        android:textSize="12sp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.05"
-                        app:layout_constraintStart_toEndOf="@+id/textView2"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <androidx.cardview.widget.CardView
-                        android:id="@+id/card_status"
-                        android:layout_width="160dp"
-                        android:layout_height="30dp"
-                        android:layout_marginTop="110dp"
-                        app:cardBackgroundColor="@color/white"
-                        app:cardCornerRadius="8dp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.384"
-                        app:layout_constraintStart_toEndOf="@+id/card_status2"
-                        app:layout_constraintTop_toTopOf="parent">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/montserratmedium"
-                            android:text="GPS :"
-                            android:textSize="14dp"
-                            android:layout_marginTop="5dp"
-                            android:layout_marginLeft="15dp"/>
-
-                        <TextView
-                            android:id="@+id/statusGps"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/montserratsemibold"
-                            android:text="@string/disconect"
-                            android:textSize="14dp"
-                            android:layout_marginTop="5dp"
-                            android:layout_marginLeft="60dp"
-                            android:textColor="@color/disconnect"/>
-
-                    </androidx.cardview.widget.CardView>
-
-                    <androidx.cardview.widget.CardView
-                        android:id="@+id/card_status2"
-                        android:layout_width="160dp"
-                        android:layout_height="30dp"
-                        android:layout_marginTop="110dp"
-                        app:cardBackgroundColor="@color/white"
-                        app:cardCornerRadius="8dp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.08"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/montserratmedium"
-                            android:text="Device :"
-                            android:textSize="14dp"
-                            android:layout_marginTop="5dp"
-                            android:layout_marginLeft="8dp"/>
-
-                        <TextView
-                            android:id="@+id/statusDevice"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/montserratsemibold"
-                            android:text="@string/connect"
-                            android:textSize="14dp"
-                            android:layout_marginTop="5dp"
-                            android:layout_marginLeft="68dp"
-                            android:textColor="@color/connect"/>
-
-                    </androidx.cardview.widget.CardView>
-
-                    <androidx.cardview.widget.CardView
-                        android:id="@+id/card_Battery"
-                        android:layout_width="330dp"
-                        android:layout_height="30dp"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginLeft="15dp"
-                        app:cardCornerRadius="8dp"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/card_status2">
-
-                        <ProgressBar
-                            android:id="@+id/power"
-                            style="@android:style/Widget.DeviceDefault.ProgressBar.Horizontal"
-                            android:layout_width="280dp"
-                            android:layout_height="12dp"
-                            android:layout_marginLeft="40dp"
-                            android:layout_marginTop="10dp"
-                            android:progressDrawable="@drawable/custom_progressbar"
-                            android:progress="80"/>
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
 
                         <ImageView
-                            android:layout_width="25dp"
-                            android:layout_height="25dp"
-                            android:src="@drawable/battery"
-                            android:layout_marginLeft="10dp"
-                            android:layout_marginTop="3dp"/>
+                            android:id="@+id/arduino_logo"
+                            android:layout_width="50dp"
+                            android:layout_height="30dp"
+                            android:layout_marginStart="175dp"
+                            android:layout_marginLeft="175dp"
+                            android:layout_marginTop="5dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.084"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/cardSetting"
+                            app:layout_constraintVertical_bias="0.059"
+                            android:src="@drawable/arduino_logo"
+                            tools:ignore="NotSibling" />
 
-                    </androidx.cardview.widget.CardView>
+                        <TextView
+                            android:id="@+id/text_power"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="100dp"
+                            android:layout_marginLeft="100dp"
+                            android:layout_marginTop="10dp"
+                            android:text="@string/powerby"
+                            android:textSize="12sp"
+                            android:textColor="@color/gray_pekat"
+                            android:fontFamily="@font/montserratregular"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.084"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/cardTime"
+                            app:layout_constraintVertical_bias="0.059"/>
 
-                    <androidx.cardview.widget.CardView
-                        android:id="@+id/cardBPM"
-                        android:layout_width="160dp"
-                        android:layout_height="60dp"
-                        android:layout_marginStart="15dp"
-                        android:layout_marginLeft="15dp"
-                        android:layout_marginTop="10dp"
-                        app:cardCornerRadius="8dp"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/card_Battery">
+                        <de.hdodenhof.circleimageview.CircleImageView
+                            android:id="@+id/circleImageView"
+                            android:layout_width="80dp"
+                            android:layout_height="80dp"
+                            android:src="@drawable/man"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.084"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintVertical_bias="0.059" />
 
-                        <RelativeLayout
-                            android:id="@+id/bpmLayout"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:background="@drawable/red_heart">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/montserratregular"
+                            android:text="@string/welcome"
+                            android:textSize="20sp"
+                            app:layout_constraintBottom_toTopOf="@+id/namaKeluarga"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.204"
+                            app:layout_constraintStart_toEndOf="@+id/circleImageView"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintVertical_bias="1.0" />
 
-                            <ImageView
-                                android:id="@+id/bpmLogo"
-                                android:layout_width="25dp"
-                                android:layout_height="25dp"
-                                android:src="@drawable/heart"
-                                android:layout_marginLeft="15dp"
-                                android:layout_marginTop="8dp"
-                                android:layout_toEndOf="@id/bpmLayout"
-                                android:layout_toRightOf="@+id/bpmLayout"
-                                tools:ignore="NotSibling"
-                                android:layout_marginStart="15dp" />
+                        <TextView
+                            android:id="@+id/namaKeluarga"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="50dp"
+                            android:layout_marginLeft="20dp"
+                            android:layout_marginStart="20dp"
+                            android:fontFamily="@font/montserratbold"
+                            android:text="@string/user"
+                            android:textColor="@color/biru_name"
+                            android:textSize="22sp"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintLeft_toRightOf="@+id/circleImageView" />
+
+                        <TextView
+                            android:id="@+id/textView2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="85dp"
+                            android:fontFamily="@font/montserratlight"
+                            android:text="Mari Pantau"
+                            android:textSize="12sp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.11"
+                            app:layout_constraintStart_toEndOf="@+id/circleImageView"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/namaPengguna"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="85dp"
+                            android:fontFamily="@font/montserratsemibold"
+                            android:text="@string/toolsuser"
+                            android:textSize="12sp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.05"
+                            app:layout_constraintStart_toEndOf="@+id/textView2"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <androidx.cardview.widget.CardView
+                            android:id="@+id/card_status"
+                            android:layout_width="160dp"
+                            android:layout_height="30dp"
+                            android:layout_marginTop="110dp"
+                            app:cardBackgroundColor="@color/white"
+                            app:cardCornerRadius="8dp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.384"
+                            app:layout_constraintStart_toEndOf="@+id/card_status2"
+                            app:layout_constraintTop_toTopOf="parent">
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@string/bpm"
-                                android:textSize="12sp"
-                                android:fontFamily="@font/montserratbold"
-                                android:layout_marginLeft="15dp"
-                                android:layout_marginTop="2dp"
-                                android:textColor="@color/white"
-                                android:layout_marginStart="15dp"
-                                android:layout_below="@id/bpmLogo"/>
-
-                            <TextView
-                                android:id="@+id/BPM"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="80"
-                                android:textSize="35sp"
-                                android:fontFamily="@font/montserratsemibold"
+                                android:fontFamily="@font/montserratmedium"
+                                android:text="GPS :"
+                                android:textSize="14dp"
                                 android:layout_marginTop="5dp"
-                                android:textColor="@color/white"
-                                android:layout_marginStart="50dp"
-                                android:layout_marginLeft="50dp"
-                                android:layout_toEndOf="@id/bpmLogo"
-                                android:layout_toRightOf="@+id/bpmLogo"/>
-
-                        </RelativeLayout>
-
-                    </androidx.cardview.widget.CardView>
-
-                    <androidx.cardview.widget.CardView
-                        android:id="@+id/cardBatery"
-                        android:layout_width="160dp"
-                        android:layout_height="60dp"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginTop="10dp"
-                        app:cardCornerRadius="8dp"
-                        app:layout_constraintStart_toEndOf="@+id/cardBPM"
-                        app:layout_constraintTop_toBottomOf="@+id/card_Battery">
-
-                        <RelativeLayout
-                            android:id="@+id/spo2Layout"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:background="@drawable/green_spo">
-
-                            <ImageView
-                                android:id="@+id/spoLogo"
-                                android:layout_width="25dp"
-                                android:layout_height="25dp"
-                                android:src="@drawable/blood"
-                                android:layout_marginLeft="10dp"
-                                android:layout_marginTop="8dp"
-                                android:layout_marginStart="10dp"
-                                android:layout_toEndOf="@id/spo2Layout"
-                                android:layout_toRightOf="@+id/spo2Layout"
-                                tools:ignore="NotSibling" />
+                                android:layout_marginLeft="15dp"/>
 
                             <TextView
+                                android:id="@+id/statusGps"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@string/blood"
-                                android:textSize="12sp"
-                                android:fontFamily="@font/montserratbold"
-                                android:layout_marginLeft="10dp"
-                                android:layout_marginTop="2dp"
-                                android:textColor="@color/white"
-                                android:layout_toEndOf="@id/spo2Layout"
-                                android:layout_toRightOf="@id/spo2Layout"
-                                android:layout_below="@id/spoLogo"
-                                tools:ignore="NotSibling" />
-
-                            <TextView
-                                android:id="@+id/spo2"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="50dp"
-                                android:layout_marginLeft="50dp"
-                                android:layout_marginTop="10dp"
-                                android:layout_toEndOf="@id/spoLogo"
-                                android:layout_toRightOf="@id/spoLogo"
                                 android:fontFamily="@font/montserratsemibold"
-                                android:text="100"
-                                android:textColor="@color/white"
-                                android:textSize="30sp" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="2dp"
-                                android:layout_marginTop="25dp"
-                                android:fontFamily="@font/montserratregular"
-                                android:text="%"
-                                android:textColor="@color/white"
-                                android:textSize="15sp"
-                                android:layout_toEndOf="@id/spo2"
-                                android:layout_toRightOf="@id/spo2"
-                                android:layout_marginStart="2dp" />
-
-                        </RelativeLayout>
-
-                    </androidx.cardview.widget.CardView>
-
-                    <androidx.cardview.widget.CardView
-                        android:id="@+id/cardTime"
-                        android:layout_width="160dp"
-                        android:layout_height="60dp"
-                        android:layout_marginStart="15dp"
-                        android:layout_marginLeft="15dp"
-                        android:layout_marginTop="10dp"
-                        app:cardCornerRadius="8dp"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/cardBPM">
-
-                        <RelativeLayout
-                            android:id="@+id/timeLayout"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:background="@drawable/purple_time">
-
-                            <ImageView
-                                android:id="@+id/timeLogo"
-                                android:layout_width="25dp"
-                                android:layout_height="25dp"
-                                android:src="@drawable/chronometer"
-                                android:layout_marginTop="8dp"
-                                android:layout_marginLeft="10dp"
-                                android:layout_toEndOf="@+id/timeLayout"
-                                android:layout_toRightOf="@+id/timeLayout"
-                                tools:ignore="NotSibling"
-                                android:layout_marginStart="10dp" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/time"
-                                android:textSize="12sp"
-                                android:fontFamily="@font/montserratbold"
-                                android:layout_marginLeft="10dp"
-                                android:layout_marginTop="2dp"
-                                android:textColor="@color/white"
-                                android:layout_marginStart="10dp"
-                                android:layout_below="@+id/timeLogo"/>
-
-                            <TextView
-                                android:id="@+id/time"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="00:20"
-                                android:textSize="30sp"
-                                android:fontFamily="@font/montserratsemibold"
-                                android:layout_marginTop="10dp"
-                                android:layout_marginLeft="25dp"
-                                android:textColor="@color/white"
-                                android:layout_marginStart="25dp"
-                                android:layout_toEndOf="@+id/timeLogo"
-                                android:layout_toRightOf="@+id/timeLogo"/>
-
-                        </RelativeLayout>
-
-                    </androidx.cardview.widget.CardView>
-
-                    <androidx.cardview.widget.CardView
-                        android:id="@+id/cardSetting"
-                        android:layout_width="160dp"
-                        android:layout_height="60dp"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginTop="10dp"
-                        app:cardCornerRadius="8dp"
-                        app:layout_constraintStart_toEndOf="@+id/cardTime"
-                        app:layout_constraintTop_toBottomOf="@+id/cardBatery">
-
-                        <RelativeLayout
-                            android:id="@+id/settingLayout"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:background="@drawable/blue_setting">
-
-                            <ImageView
-                                android:id="@+id/settingLogo"
-                                android:layout_width="35dp"
-                                android:layout_height="35dp"
-                                android:src="@drawable/preferences"
-                                android:layout_marginLeft="15dp"
-                                android:layout_marginTop="15dp"
-                                android:layout_marginStart="15dp"
-                                android:layout_toEndOf="@+id/settingLayout"
-                                android:layout_toRightOf="@+id/settingLayout"
-                                tools:ignore="NotSibling" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/setting"
-                                android:textSize="20sp"
-                                android:fontFamily="@font/montserratsemibold"
+                                android:text="@string/disconect"
+                                android:textSize="14dp"
+                                android:layout_marginTop="5dp"
                                 android:layout_marginLeft="60dp"
-                                android:layout_marginTop="17dp"
-                                android:textColor="@color/white"
-                                android:layout_marginStart="10dp"
-                                android:layout_toEndOf="@+id/settingLogo"
-                                android:layout_toRightOf="@+id/settingLogo" />
+                                android:textColor="@color/disconnect"/>
 
-                        </RelativeLayout>
+                        </androidx.cardview.widget.CardView>
 
-                    </androidx.cardview.widget.CardView>
+                        <androidx.cardview.widget.CardView
+                            android:id="@+id/card_status2"
+                            android:layout_width="160dp"
+                            android:layout_height="30dp"
+                            android:layout_marginTop="110dp"
+                            app:cardBackgroundColor="@color/white"
+                            app:cardCornerRadius="8dp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.08"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent">
 
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/montserratmedium"
+                                android:text="Device :"
+                                android:textSize="14dp"
+                                android:layout_marginTop="5dp"
+                                android:layout_marginLeft="8dp"/>
+
+                            <TextView
+                                android:id="@+id/statusDevice"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/montserratsemibold"
+                                android:text="@string/connect"
+                                android:textSize="14dp"
+                                android:layout_marginTop="5dp"
+                                android:layout_marginLeft="68dp"
+                                android:textColor="@color/connect"/>
+
+                        </androidx.cardview.widget.CardView>
+
+                        <androidx.cardview.widget.CardView
+                            android:id="@+id/card_Battery"
+                            android:layout_width="330dp"
+                            android:layout_height="30dp"
+                            android:layout_marginTop="15dp"
+                            android:layout_marginLeft="15dp"
+                            app:cardCornerRadius="8dp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/card_status2">
+
+                            <ProgressBar
+                                android:id="@+id/power"
+                                style="@android:style/Widget.DeviceDefault.ProgressBar.Horizontal"
+                                android:layout_width="280dp"
+                                android:layout_height="12dp"
+                                android:layout_marginLeft="40dp"
+                                android:layout_marginTop="10dp"
+                                android:progressDrawable="@drawable/custom_progressbar"
+                                android:progress="80"/>
+
+                            <ImageView
+                                android:layout_width="25dp"
+                                android:layout_height="25dp"
+                                android:src="@drawable/battery"
+                                android:layout_marginLeft="10dp"
+                                android:layout_marginTop="3dp"/>
+
+                        </androidx.cardview.widget.CardView>
+
+                        <androidx.cardview.widget.CardView
+                            android:id="@+id/cardBPM"
+                            android:layout_width="160dp"
+                            android:layout_height="65dp"
+                            android:layout_marginStart="15dp"
+                            android:layout_marginLeft="15dp"
+                            android:layout_marginTop="10dp"
+                            app:cardCornerRadius="8dp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/card_Battery">
+
+                            <RelativeLayout
+                                android:id="@+id/bpmLayout"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:background="@drawable/red_heart">
+
+                                <ImageView
+                                    android:id="@+id/bpmLogo"
+                                    android:layout_width="25dp"
+                                    android:layout_height="25dp"
+                                    android:src="@drawable/heart"
+                                    android:layout_marginLeft="15dp"
+                                    android:layout_marginTop="10dp"
+                                    android:layout_toEndOf="@id/bpmLayout"
+                                    android:layout_toRightOf="@+id/bpmLayout"
+                                    tools:ignore="NotSibling"
+                                    android:layout_marginStart="15dp" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/bpm"
+                                    android:textSize="12sp"
+                                    android:fontFamily="@font/montserratbold"
+                                    android:layout_marginLeft="15dp"
+                                    android:layout_marginTop="2dp"
+                                    android:textColor="@color/white"
+                                    android:layout_marginStart="15dp"
+                                    android:layout_below="@id/bpmLogo"/>
+
+                                <TextView
+                                    android:id="@+id/BPM"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="80"
+                                    android:textSize="35sp"
+                                    android:fontFamily="@font/montserratsemibold"
+                                    android:layout_marginTop="8dp"
+                                    android:textColor="@color/white"
+                                    android:layout_marginStart="50dp"
+                                    android:layout_marginLeft="50dp"
+                                    android:layout_toEndOf="@id/bpmLogo"
+                                    android:layout_toRightOf="@+id/bpmLogo"/>
+
+                            </RelativeLayout>
+
+                        </androidx.cardview.widget.CardView>
+
+                        <androidx.cardview.widget.CardView
+                            android:id="@+id/cardBatery"
+                            android:layout_width="160dp"
+                            android:layout_height="65dp"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginTop="10dp"
+                            app:cardCornerRadius="8dp"
+                            app:layout_constraintStart_toEndOf="@+id/cardBPM"
+                            app:layout_constraintTop_toBottomOf="@+id/card_Battery">
+
+                            <RelativeLayout
+                                android:id="@+id/spo2Layout"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:background="@drawable/green_spo">
+
+                                <ImageView
+                                    android:id="@+id/spoLogo"
+                                    android:layout_width="25dp"
+                                    android:layout_height="25dp"
+                                    android:src="@drawable/blood"
+                                    android:layout_marginLeft="10dp"
+                                    android:layout_marginTop="10dp"
+                                    android:layout_marginStart="10dp"
+                                    android:layout_toEndOf="@id/spo2Layout"
+                                    android:layout_toRightOf="@+id/spo2Layout"
+                                    tools:ignore="NotSibling" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/blood"
+                                    android:textSize="12sp"
+                                    android:fontFamily="@font/montserratbold"
+                                    android:layout_marginLeft="10dp"
+                                    android:layout_marginTop="2dp"
+                                    android:textColor="@color/white"
+                                    android:layout_toEndOf="@id/spo2Layout"
+                                    android:layout_toRightOf="@id/spo2Layout"
+                                    android:layout_below="@id/spoLogo"
+                                    tools:ignore="NotSibling" />
+
+                                <TextView
+                                    android:id="@+id/spo2"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="50dp"
+                                    android:layout_marginLeft="50dp"
+                                    android:layout_marginTop="12dp"
+                                    android:layout_toEndOf="@id/spoLogo"
+                                    android:layout_toRightOf="@id/spoLogo"
+                                    android:fontFamily="@font/montserratsemibold"
+                                    android:text="100"
+                                    android:textColor="@color/white"
+                                    android:textSize="30sp" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="2dp"
+                                    android:layout_marginTop="25dp"
+                                    android:fontFamily="@font/montserratregular"
+                                    android:text="%"
+                                    android:textColor="@color/white"
+                                    android:textSize="15sp"
+                                    android:layout_toEndOf="@id/spo2"
+                                    android:layout_toRightOf="@id/spo2"
+                                    android:layout_marginStart="2dp" />
+
+                            </RelativeLayout>
+
+                        </androidx.cardview.widget.CardView>
+
+                        <androidx.cardview.widget.CardView
+                            android:id="@+id/cardTime"
+                            android:layout_width="160dp"
+                            android:layout_height="65dp"
+                            android:layout_marginStart="15dp"
+                            android:layout_marginLeft="15dp"
+                            android:layout_marginTop="10dp"
+                            app:cardCornerRadius="8dp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/cardBPM">
+
+                            <RelativeLayout
+                                android:id="@+id/timeLayout"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:background="@drawable/purple_time">
+
+                                <ImageView
+                                    android:id="@+id/timeLogo"
+                                    android:layout_width="25dp"
+                                    android:layout_height="25dp"
+                                    android:src="@drawable/chronometer"
+                                    android:layout_marginTop="10dp"
+                                    android:layout_marginLeft="10dp"
+                                    android:layout_toEndOf="@+id/timeLayout"
+                                    android:layout_toRightOf="@+id/timeLayout"
+                                    tools:ignore="NotSibling"
+                                    android:layout_marginStart="10dp" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/time"
+                                    android:textSize="12sp"
+                                    android:fontFamily="@font/montserratbold"
+                                    android:layout_marginLeft="10dp"
+                                    android:layout_marginTop="2dp"
+                                    android:textColor="@color/white"
+                                    android:layout_marginStart="10dp"
+                                    android:layout_below="@+id/timeLogo"/>
+
+                                <TextView
+                                    android:id="@+id/time"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="00:20"
+                                    android:textSize="30sp"
+                                    android:fontFamily="@font/montserratsemibold"
+                                    android:layout_marginTop="10dp"
+                                    android:layout_marginLeft="25dp"
+                                    android:textColor="@color/white"
+                                    android:layout_marginStart="25dp"
+                                    android:layout_toEndOf="@+id/timeLogo"
+                                    android:layout_toRightOf="@+id/timeLogo"/>
+
+                            </RelativeLayout>
+
+                        </androidx.cardview.widget.CardView>
+
+                        <androidx.cardview.widget.CardView
+                            android:id="@+id/cardSetting"
+                            android:layout_width="160dp"
+                            android:layout_height="65dp"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginTop="10dp"
+                            app:cardCornerRadius="8dp"
+                            app:layout_constraintStart_toEndOf="@+id/cardTime"
+                            app:layout_constraintTop_toBottomOf="@+id/cardBatery">
+
+                            <RelativeLayout
+                                android:id="@+id/settingLayout"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:background="@drawable/blue_setting">
+
+                                <ImageView
+                                    android:id="@+id/settingLogo"
+                                    android:layout_width="35dp"
+                                    android:layout_height="35dp"
+                                    android:src="@drawable/preferences"
+                                    android:layout_marginLeft="15dp"
+                                    android:layout_marginTop="15dp"
+                                    android:layout_marginStart="15dp"
+                                    android:layout_toEndOf="@+id/settingLayout"
+                                    android:layout_toRightOf="@+id/settingLayout"
+                                    tools:ignore="NotSibling" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/setting"
+                                    android:textSize="20sp"
+                                    android:fontFamily="@font/montserratsemibold"
+                                    android:layout_marginLeft="60dp"
+                                    android:layout_marginTop="18dp"
+                                    android:textColor="@color/white"
+                                    android:layout_marginStart="10dp"
+                                    android:layout_toEndOf="@+id/settingLogo"
+                                    android:layout_toRightOf="@+id/settingLogo" />
+
+                            </RelativeLayout>
+
+                        </androidx.cardview.widget.CardView>
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
             </androidx.cardview.widget.CardView>
 

@@ -5,14 +5,17 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -37,25 +40,27 @@ public class MainActivity extends AppCompatActivity {
     private TextView retriveRuntime;
     private TextView retrivePengguna;
     private TextView retriveKeluarga;
-    private ProgressBar retriveBattery;
+    private TextView retriveBattery;
+    private boolean device_status = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.mainmenu_activity);
 
         //call database reference and retrive to view
-        databaseReference = database.getReference("Device_9C:9C:1F:47:B4:FA");
+        databaseReference = database.getReference("Device_50:02:91:C9:DF:C4");
 
-        retrivePengguna = findViewById(R.id.namaPengguna);
-        retriveKeluarga = findViewById(R.id.namaKeluarga);
+        retrivePengguna = findViewById(R.id.nama_pengguna);
+        retriveKeluarga = findViewById(R.id.nama_keluarga);
         retriveStatusDevice = findViewById(R.id.statusDevice);
         retriveStatusGps = findViewById(R.id.statusGps);
         retriveSpo2 = findViewById(R.id.spo2);
         retriveBPM = findViewById(R.id.BPM);
-        retriveBattery = findViewById(R.id.power);
+        retriveBattery = findViewById(R.id.baterai);
         retriveRuntime = findViewById(R.id.time);
         //call function
+        refreshData();
         getData();
 
         //initialize fragment
@@ -68,8 +73,8 @@ public class MainActivity extends AppCompatActivity {
                 .commit();
 
         //onclik maps to maps view
-        Button button = (Button) findViewById(R.id.mapsbutton);
-        button.setOnClickListener(new View.OnClickListener() {
+        CardView maps = (CardView) findViewById(R.id.mapsbutton);
+        maps.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 openMapsActivity();
@@ -77,8 +82,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
         //onclik bpm to bpm log
-        CardView cardView = (CardView) findViewById(R.id.cardBPM);
-        cardView.setOnClickListener(new View.OnClickListener() {
+        CardView bpm = (CardView) findViewById(R.id.cardBPM);
+        bpm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 openBpmActivity();
@@ -86,8 +91,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
         //onclik power to power log
-        CardView cardView1 = (CardView) findViewById(R.id.cardBatery);
-        cardView1.setOnClickListener(new View.OnClickListener(){
+        CardView spo2 = (CardView) findViewById(R.id.cardSpo);
+        spo2.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
                 openPowerActivity();
@@ -95,8 +100,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
         //onclik time to time log
-        CardView cardView2 = (CardView) findViewById(R.id.cardTime);
-        cardView2.setOnClickListener(new View.OnClickListener() {
+        CardView time = (CardView) findViewById(R.id.cardTime);
+        time.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 openTimeActivity();
@@ -104,39 +109,40 @@ public class MainActivity extends AppCompatActivity {
         });
 
         //onclik setting to setting menu
-        CardView cardView3 = (CardView) findViewById(R.id.cardSetting);
-        cardView3.setOnClickListener(new View.OnClickListener() {
+        ImageView setting = (ImageView) findViewById(R.id.setting);
+        setting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 openSettingActivity();
             }
         });
 
-        //disable scrollview on maps frame
-//        final ScrollView scrollView = (ScrollView) findViewById(R.id.scrollview);
-//        ImageView transparent = (ImageView) findViewById(R.id.imagetrans);
-//
-//        transparent.setOnTouchListener(new View.OnTouchListener() {
-//            @Override
-//            public boolean onTouch(View v, MotionEvent event) {
-//                int action = event.getAction();
-//                switch (action){
-//                    case MotionEvent.ACTION_DOWN:
-//                        //dissallow scrollview to intercept touch event
-//                        scrollView.requestDisallowInterceptTouchEvent(true);
-//                        //disable touch on transparent view
-//                        return false;
-//                    case MotionEvent.ACTION_UP:
-//                        scrollView.requestDisallowInterceptTouchEvent(false);
-//                        return true;
-//                    case MotionEvent.ACTION_MOVE:
-//                        scrollView.requestDisallowInterceptTouchEvent(true);
-//                        return false;
-//                    default:
-//                        return true;
-//                }
-//            }
-//        });
+        final SwipeRefreshLayout pullToRefresh = findViewById(R.id.pullToRefreshMain);
+        pullToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                refreshData();
+                pullToRefresh.setRefreshing(false);
+            }
+        });
+    }
+    //fungsi untuk melakukan refresh data
+    public void refreshData(){
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                if(device_status){
+                    device_status = false;
+                    databaseReference.child("flag_status").child("status_device").setValue(0);
+                    databaseReference.child("flag_status").child("status_gps").setValue(0);
+                    databaseReference.child("raw_data").child("battery_level").setValue(0);
+                    databaseReference.child("raw_data").child("bpm_level").setValue(0);
+                    databaseReference.child("raw_data").child("spo2_level").setValue(0);
+                }else{
+                    handler.postDelayed(this, 100);
+                }
+            }
+        },100);
     }
 
     public void getData(){
@@ -148,6 +154,8 @@ public class MainActivity extends AppCompatActivity {
             @RequiresApi(api = Build.VERSION_CODES.M)
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                //parameter penentu status device dan gps
+                device_status = true;
                 //get data identitas pengguna alat
                 nama_pengguna = dataSnapshot.child("user_pengguna").getValue(String.class);
                 nama_keluarga = dataSnapshot.child("user_keluarga").getValue(String.class);
@@ -213,7 +221,7 @@ public class MainActivity extends AppCompatActivity {
                 //set data retrive to view
                 retrivePengguna.setText(nama_pengguna);
                 retriveKeluarga.setText(nama_keluarga);
-                retriveBattery.setProgress(baterai_value);
+                retriveBattery.setText(Integer.toString(baterai_value));
                 retriveBPM.setText(Integer.toString(bpm_value));
                 retriveSpo2.setText(Integer.toString(spo_value));
                 retriveRuntime.setText(get_waktu);
