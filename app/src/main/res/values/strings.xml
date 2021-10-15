@@ -19,4 +19,8 @@
     <string name="sidik_jari">Sidik Jari</string>
     <string name="tambah_sidikjari">Tambah Sidik Jari</string>
     <string name="powerby">Powered by</string>
+    <string name="upload_foto">Upload Foto</string>
+    <string name="desc_foto">Pilih gambar yang ingin di upload atau ambil gambar</string>
+    <string name="ambil_foto">Ambil Gambar</string>
+    <string name="pilih_foto">Cari Gambar</string>
 </resources>

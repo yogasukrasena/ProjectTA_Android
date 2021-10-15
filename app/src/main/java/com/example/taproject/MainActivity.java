@@ -20,11 +20,14 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -33,6 +36,7 @@ import java.util.Date;
 public class MainActivity extends AppCompatActivity {
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference databaseReference;
+    StorageReference storageReference;
     private TextView retriveBPM;
     private TextView retriveStatusDevice;
     private TextView retriveStatusGps;
@@ -41,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView retrivePengguna;
     private TextView retriveKeluarga;
     private TextView retriveBattery;
+    private ImageView imageProfile;
     private boolean device_status = false;
 
     @Override
@@ -50,6 +55,8 @@ public class MainActivity extends AppCompatActivity {
 
         //call database reference and retrive to view
         databaseReference = database.getReference("Device_50:02:91:C9:DF:C4");
+        //Mendapatkan Referensi dari Firebase Storage
+        storageReference = FirebaseStorage.getInstance().getReference();
 
         retrivePengguna = findViewById(R.id.nama_pengguna);
         retriveKeluarga = findViewById(R.id.nama_keluarga);
@@ -59,9 +66,24 @@ public class MainActivity extends AppCompatActivity {
         retriveBPM = findViewById(R.id.BPM);
         retriveBattery = findViewById(R.id.baterai);
         retriveRuntime = findViewById(R.id.time);
+        imageProfile = findViewById(R.id.foto_profile);
         //call function
         refreshData();
         getData();
+
+        //fungsi menampilkan foto profile
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            String linkFoto;
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                linkFoto = snapshot.child("foto_profile").getValue(String.class);
+                showProfile(imageProfile,linkFoto);
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(MainActivity.this, "Gagal mengambil foto profile", Toast.LENGTH_SHORT).show();
+            }
+        });
 
         //initialize fragment
         Fragment fragment = new MapFragment();
@@ -143,6 +165,23 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         },100);
+    }
+
+    //fungsi mengambil foto profile default ketika belum ada foto yg diupload
+    public int getDefaultImage(String imageName){
+        int drawableResourceId = this.getResources().getIdentifier(imageName, "drawable", this.getPackageName());
+        return drawableResourceId;
+    }
+
+    //menampilkan foto profile dari firebase
+    public void showProfile(ImageView imageView, String linkFoto){
+        StorageReference dataFotoRef = storageReference.child("foto_profile/").child(linkFoto);
+        if(linkFoto.equals("default_foto")){
+            Glide.with(this).load(getDefaultImage("man")).into(imageView);
+        }else{
+            Glide.with(this).load(dataFotoRef).into(imageView);
+            Log.d("getFoto", String.valueOf(dataFotoRef));
+        }
     }
 
     public void getData(){
