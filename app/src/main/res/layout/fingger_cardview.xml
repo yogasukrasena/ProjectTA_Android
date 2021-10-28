@@ -53,6 +53,7 @@
             android:layout_toRightOf="@+id/fingerTitle" />
 
         <ImageView
+            android:id="@+id/hapus_finger"
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:src="@drawable/delete"

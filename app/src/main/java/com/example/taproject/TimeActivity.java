@@ -2,6 +2,7 @@ package com.example.taproject;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -14,6 +15,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.sql.Time;
@@ -54,7 +56,7 @@ public class TimeActivity extends AppCompatActivity {
 
     void addData() {
         databaseReference = database.getReference("Device_50:02:91:C9:DF:C4");
-        final DatabaseReference datahasil = databaseReference.child("log_data");
+        DatabaseReference datahasil = databaseReference.child("log_data");
         datahasil.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -73,5 +75,13 @@ public class TimeActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if(keyCode == KeyEvent.KEYCODE_BACK){
+            finish();
+        }
+        return super.onKeyDown(keyCode,event);
     }
 }

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/fingger_sucess"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:cardBackgroundColor="@color/gray_status"
+        app:cardCornerRadius="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:layout_width="110dp"
+            android:layout_height="170dp"
+            android:layout_marginTop="-30dp"
+            android:src="@drawable/fingerprint"
+            android:alpha="0.2"
+            android:layout_gravity="center"/>
+
+        <TextView
+            android:id="@+id/status_scan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="60dp"
+            android:layout_gravity="center"
+            android:fontFamily="@font/montserratregular"
+            android:text="Mulai melakukan scan sidik jari.."
+            android:textSize="14sp" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/kembali"
+            android:layout_width="110dp"
+            android:layout_height="35dp"
+            android:layout_marginTop="120dp"
+            android:layout_gravity="center"
+            android:background="@drawable/submit_button"
+            android:text="Kembali"
+            android:textColor="@color/white"
+            android:textSize="10sp"
+            android:fontFamily="@font/montserratbold"
+            android:visibility="gone"/>
+
+    </androidx.cardview.widget.CardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -22,6 +23,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.cardview.widget.CardView;
 
 import com.bumptech.glide.Glide;
@@ -38,6 +40,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
@@ -47,6 +50,8 @@ import com.google.firebase.storage.UploadTask;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.UUID;
 
 public class SettingActivity extends AppCompatActivity {
@@ -65,10 +70,20 @@ public class SettingActivity extends AppCompatActivity {
     private CardView progressCard;
     private ProgressBar progressUpload;
 
+    //deklarasi elemen lainnya
+    private TextView hapusLog;
+    private AppCompatButton submit_hapuslog;
+    private AppCompatButton cancel_hapuslog;
+    private TextView fingerMenu;
+    private AppCompatButton submit;
+    private AppCompatButton cancel;
+    private ImageView fotoProfile;
+
     //Kode permintaan untuk memilih metode pengambilan gamabr
     private static final int REQUEST_CODE_CAMERA = 1;
     private static final int REQUEST_CODE_GALLERY = 2;
     Dialog uploadFoto;
+    Dialog hapusLogAll;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,13 +98,13 @@ public class SettingActivity extends AppCompatActivity {
         //menampilkan data nama pengguna dan keluarga
         getData();
 
-        ImageView imageView = (ImageView) findViewById(R.id.foto_profile);
+        fotoProfile = findViewById(R.id.foto_profile);
         databaseReference.addValueEventListener(new ValueEventListener() {
             String linkFoto;
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 linkFoto = snapshot.child("foto_profile").getValue(String.class);
-                showProfile(imageView,linkFoto);
+                showProfile(fotoProfile,linkFoto);
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
@@ -97,16 +112,25 @@ public class SettingActivity extends AppCompatActivity {
             }
         });
 
-        imageView.setOnClickListener(new View.OnClickListener() {
+        fotoProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 tampilPopUp(v);
             }
         });
 
+        //onclik hapus fingger
+        hapusLog = (TextView) findViewById(R.id.hapus_log);
+        hapusLog.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                hapusLogAll();
+            }
+        });
+
         //onclik in setting to fingger list
-        TextView textView = (TextView) findViewById(R.id.fingger_button);
-        textView.setOnClickListener(new View.OnClickListener() {
+        fingerMenu = (TextView) findViewById(R.id.fingger_button);
+        fingerMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 openFinggerPrint();
@@ -114,16 +138,16 @@ public class SettingActivity extends AppCompatActivity {
         });
 
         //onclik upload data
-        CardView submit = (CardView) findViewById(R.id.submit);
+        submit = (AppCompatButton) findViewById(R.id.submit);
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 uploadData();
-                submit.setCardBackgroundColor(Color.parseColor("#5c5c5c"));
             }
         });
+
         //onclik cancel
-        CardView cancel = (CardView) findViewById(R.id.cancel);
+        cancel = (AppCompatButton) findViewById(R.id.cancel);
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -166,10 +190,12 @@ public class SettingActivity extends AppCompatActivity {
     public void showProfile(ImageView imageView, String linkFoto){
         StorageReference dataFotoRef = storageReference.child("foto_profile/").child(linkFoto);
         if(linkFoto.equals("default_foto")){
-            Glide.with(this).load(getDefaultImage("man")).into(imageView);
+            Glide.with(SettingActivity.this).load(getDefaultImage("man")).into(imageView);
         }else{
-            Glide.with(this).load(dataFotoRef).into(imageView);
-            Log.d("getFoto", String.valueOf(dataFotoRef));
+            if(!SettingActivity.this.isFinishing()){
+                Glide.with(SettingActivity.this).load(dataFotoRef).into(imageView);
+                Log.d("getFoto", String.valueOf(dataFotoRef));
+            }
         }
     }
 
@@ -207,7 +233,7 @@ public class SettingActivity extends AppCompatActivity {
         progressUpload = uploadFoto.findViewById(R.id.progress_upload);
 
         //button pada view pilih sumber gambar
-        CardView ambilGambar = (CardView) uploadFoto.findViewById(R.id.ambil_gambar);
+        AppCompatButton ambilGambar = (AppCompatButton) uploadFoto.findViewById(R.id.ambil_gambar);
         ambilGambar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -217,7 +243,7 @@ public class SettingActivity extends AppCompatActivity {
             }
         });
 
-        CardView cariGambar = (CardView) uploadFoto.findViewById(R.id.cari_gambar);
+        AppCompatButton cariGambar = (AppCompatButton) uploadFoto.findViewById(R.id.cari_gambar);
         cariGambar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -228,7 +254,7 @@ public class SettingActivity extends AppCompatActivity {
         });
 
         //button pada halaman view upload gambar
-        CardView uploadGambar = (CardView) uploadFoto.findViewById(R.id.upload_button);
+        AppCompatButton uploadGambar = (AppCompatButton) uploadFoto.findViewById(R.id.upload_button);
         uploadGambar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -236,7 +262,7 @@ public class SettingActivity extends AppCompatActivity {
             }
         });
 
-        CardView cancelGambar = (CardView) uploadFoto.findViewById(R.id.cancel_foto_button);
+        AppCompatButton cancelGambar = (AppCompatButton) uploadFoto.findViewById(R.id.cancel_foto_button);
         cancelGambar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -331,8 +357,79 @@ public class SettingActivity extends AppCompatActivity {
         });
     }
 
+    //fungsi hapus semua log
+    //menyisakan satu data log terakhir untuk mempertahankan struktur data pada aplikasi
+    public void hapusLogAll(){
+        hapusLogAll = new Dialog(this);
+        hapusLogAll.setContentView(R.layout.popup_dellog);
+        hapusLogAll.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        hapusLogAll.show();
+
+        submit_hapuslog = hapusLogAll.findViewById(R.id.lanjutkan_hapus);
+        submit_hapuslog.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        DataSnapshot datalog = snapshot.child("log_data");
+                        SimpleDateFormat currentDate = new SimpleDateFormat("dd-MM-yyyy");
+                        SimpleDateFormat df = new SimpleDateFormat("HH:mm");
+                        Date datenow = new Date();
+                        String tanggal_sekarang = currentDate.format(datenow);
+                        String child_terbaru = "";
+                        for(DataSnapshot user : datalog.getChildren()){
+                            String namakey = user.getKey();
+                            String[] split = namakey.split("_");
+                            String nilaikey = split[0];
+                            if(nilaikey.equals(tanggal_sekarang)){
+                                child_terbaru = namakey;
+                            }else{
+                                child_terbaru = namakey;
+                            }
+                        }
+                        // validasi jumlah data yang masih tersedia
+                        for(DataSnapshot hapus : datalog.getChildren()){
+                            int data = (int) datalog.getChildrenCount();
+                            if(data == 1){
+                                Toast.makeText(SettingActivity.this, "Data log sudah bersih", Toast.LENGTH_SHORT).show();
+                            }else{
+                                if(!hapus.getKey().equals(child_terbaru)){
+                                    hapus.getRef().removeValue();
+                                    Toast.makeText(SettingActivity.this, "Data log berhasil dihapus", Toast.LENGTH_SHORT).show();
+                                    hapusLogAll.dismiss();
+                                }
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        Toast.makeText(SettingActivity.this, "Gagal menghapus log", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
+
+        cancel_hapuslog = hapusLogAll.findViewById(R.id.cancel);
+        cancel_hapuslog.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                hapusLogAll.dismiss();
+            }
+        });
+    }
+
     public void openFinggerPrint(){
         Intent intent = new Intent(this, FinggerActivity.class);
         startActivity(intent);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if(keyCode == KeyEvent.KEYCODE_BACK){
+            finish();
+        }
+        return super.onKeyDown(keyCode,event);
     }
 }

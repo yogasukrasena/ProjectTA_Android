@@ -35,47 +35,31 @@
             android:text="@string/desc_foto"
             android:textSize="12sp" />
 
-        <androidx.cardview.widget.CardView
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/ambil_gambar"
             android:layout_width="110dp"
             android:layout_height="35dp"
             android:layout_marginStart="30dp"
             android:layout_marginLeft="30dp"
             android:layout_marginTop="85dp"
-            app:cardBackgroundColor="@color/biru_submit"
-            app:cardCornerRadius="8dp">
+            android:background="@drawable/submit_button"
+            android:text="@string/ambil_foto"
+            android:textColor="@color/white"
+            android:textSize="10sp"
+            android:fontFamily="@font/montserratbold"/>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:fontFamily="@font/montserratregular"
-                android:text="@string/ambil_foto"
-                android:textColor="@color/white"
-                android:textSize="12sp" />
-
-        </androidx.cardview.widget.CardView>
-
-        <androidx.cardview.widget.CardView
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/cari_gambar"
             android:layout_width="110dp"
             android:layout_height="35dp"
             android:layout_marginStart="160dp"
             android:layout_marginLeft="160dp"
             android:layout_marginTop="85dp"
-            app:cardBackgroundColor="@color/biru_submit"
-            app:cardCornerRadius="8dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:fontFamily="@font/montserratregular"
-                android:text="@string/pilih_foto"
-                android:textColor="@color/white"
-                android:textSize="12sp" />
-
-        </androidx.cardview.widget.CardView>
+            android:background="@drawable/submit_button"
+            android:text="@string/pilih_foto"
+            android:textColor="@color/white"
+            android:textSize="10sp"
+            android:fontFamily="@font/montserratbold"/>
 
     </androidx.cardview.widget.CardView>
 
@@ -104,50 +88,34 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toTopOf="parent"/>
 
-            <androidx.cardview.widget.CardView
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/upload_button"
                 android:layout_width="110dp"
                 android:layout_height="35dp"
-                app:cardBackgroundColor="@color/biru_submit"
-                app:cardCornerRadius="8dp"
                 android:layout_marginStart="30dp"
                 android:layout_marginLeft="30dp"
+                android:background="@drawable/submit_button"
+                android:text="Upload"
+                android:textColor="@color/white"
+                android:textSize="10sp"
+                android:fontFamily="@font/montserratbold"
                 app:layout_constraintTop_toBottomOf="@id/image_container"
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent">
+                app:layout_constraintBottom_toBottomOf="parent"/>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:fontFamily="@font/montserratregular"
-                    android:text="Upload"
-                    android:textColor="@color/white"
-                    android:textSize="12sp" />
-
-            </androidx.cardview.widget.CardView>
-
-            <androidx.cardview.widget.CardView
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/cancel_foto_button"
                 android:layout_width="110dp"
                 android:layout_height="35dp"
-                app:cardBackgroundColor="@color/gray_pekat"
-                app:cardCornerRadius="8dp"
+                android:background="@drawable/cancel_button"
+                android:text="Cancel"
+                android:textColor="@color/white"
+                android:textSize="10sp"
+                android:fontFamily="@font/montserratbold"
                 app:layout_constraintTop_toBottomOf="@id/image_container"
                 app:layout_constraintLeft_toRightOf="@id/upload_button"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:fontFamily="@font/montserratregular"
-                    android:text="Cancel"
-                    android:textColor="@color/white"
-                    android:textSize="12sp" />
-
-            </androidx.cardview.widget.CardView>
+                app:layout_constraintBottom_toBottomOf="parent"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

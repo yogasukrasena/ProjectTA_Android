@@ -13,6 +13,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -160,6 +161,7 @@ public class MainActivity extends AppCompatActivity {
                     databaseReference.child("raw_data").child("battery_level").setValue(0);
                     databaseReference.child("raw_data").child("bpm_level").setValue(0);
                     databaseReference.child("raw_data").child("spo2_level").setValue(0);
+                    databaseReference.child("raw_data").child("selisih_data").setValue("00:00");
                 }else{
                     handler.postDelayed(this, 100);
                 }
@@ -255,7 +257,7 @@ public class MainActivity extends AppCompatActivity {
                 //upload data kalkulasi selisih runing time alat ke dalam firebase
                 databaseReference.child("log_data").child(child_terbaru+"/selisih_waktu").setValue(count_waktu);
                 //get data selisih waktu
-                get_waktu = datalog.child(child_terbaru+"/selisih_waktu").getValue(String.class);
+                get_waktu = dataraw.child("selisih_data").getValue(String.class);
 
                 //set data retrive to view
                 retrivePengguna.setText(nama_pengguna);
@@ -266,6 +268,8 @@ public class MainActivity extends AppCompatActivity {
                 retriveRuntime.setText(get_waktu);
 
                 if(status_device == 1){
+                    //menampilkan status connect serta kalkulasi selisih waktu pada halaman home
+                    databaseReference.child("raw_data").child("selisih_data").setValue(count_waktu);
                     retriveStatusDevice.setText(getString(R.string.connect));
                     retriveStatusDevice.setTextColor(getColor(R.color.connect));
                 }else{
@@ -312,5 +316,13 @@ public class MainActivity extends AppCompatActivity {
     public void openSettingActivity(){
         Intent intent = new Intent(this, SettingActivity.class);
         startActivity(intent);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if(keyCode == KeyEvent.KEYCODE_BACK){
+            finish();
+        }
+        return super.onKeyDown(keyCode,event);
     }
 }

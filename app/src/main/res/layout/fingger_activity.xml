@@ -13,7 +13,7 @@
         app:layout_constraintVertical_bias="0.0"/>
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/cardView"
+        android:id="@+id/card_tambah_finger"
         android:layout_width="match_parent"
         android:layout_height="80dp"
         android:layout_below="@id/recycler_fingger"
@@ -28,7 +28,8 @@
             android:layout_marginLeft="30dp"
             android:layout_marginTop="20dp"
             app:cardBackgroundColor="@color/biru_submit"
-            app:cardCornerRadius="10dp">
+            app:cardCornerRadius="10dp"
+            android:visibility="gone">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -52,6 +53,16 @@
                 android:textSize="30px" />
 
         </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:id="@+id/max_finger"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Sidik jari yang terdaftar sudah maksimal"
+            android:fontFamily="@font/montserratmedium"
+            android:textSize="12sp"
+            android:visibility="gone"/>
 
     </androidx.cardview.widget.CardView>
 
