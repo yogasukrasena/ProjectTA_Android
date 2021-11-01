@@ -373,21 +373,12 @@ public class SettingActivity extends AppCompatActivity {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         DataSnapshot datalog = snapshot.child("log_data");
-                        SimpleDateFormat currentDate = new SimpleDateFormat("dd-MM-yyyy");
-                        SimpleDateFormat df = new SimpleDateFormat("HH:mm");
-                        Date datenow = new Date();
-                        String tanggal_sekarang = currentDate.format(datenow);
                         String child_terbaru = "";
                         for(DataSnapshot user : datalog.getChildren()){
                             String namakey = user.getKey();
-                            String[] split = namakey.split("_");
-                            String nilaikey = split[0];
-                            if(nilaikey.equals(tanggal_sekarang)){
-                                child_terbaru = namakey;
-                            }else{
-                                child_terbaru = namakey;
-                            }
+                            child_terbaru = namakey;
                         }
+                        Log.d("namaLog", child_terbaru);
                         // validasi jumlah data yang masih tersedia
                         for(DataSnapshot hapus : datalog.getChildren()){
                             int data = (int) datalog.getChildrenCount();

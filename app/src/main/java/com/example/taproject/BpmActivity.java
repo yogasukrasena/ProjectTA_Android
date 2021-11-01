@@ -18,6 +18,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class BpmActivity extends AppCompatActivity {
@@ -60,6 +61,7 @@ public class BpmActivity extends AppCompatActivity {
                         BpmClass l = npsnapshot.getValue(BpmClass.class);
                         dataList.add(l);
                     }
+                    Collections.reverse(dataList);
                     adapter = new BpmAdapter(dataList);
                     recyclerView.setAdapter(adapter);
                 }

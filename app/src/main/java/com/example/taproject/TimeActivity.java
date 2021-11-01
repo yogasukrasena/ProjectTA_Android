@@ -22,6 +22,8 @@ import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -65,6 +67,7 @@ public class TimeActivity extends AppCompatActivity {
                         TimeClass l = npsnapshot.getValue(TimeClass.class);
                         dataList.add(l);
                     }
+                    Collections.reverse(dataList);
                     adapter = new TimeAdapter(dataList);
                     recyclerView.setAdapter(adapter);
                 }

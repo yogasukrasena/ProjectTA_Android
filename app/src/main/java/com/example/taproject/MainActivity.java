@@ -215,21 +215,13 @@ public class MainActivity extends AppCompatActivity {
                 spo_value = dataraw.child("spo2_level").getValue(Integer.class);
 
                 DataSnapshot datalog = dataSnapshot.child("log_data");
-                SimpleDateFormat currentDate = new SimpleDateFormat("dd-MM-yyyy");
                 SimpleDateFormat df = new SimpleDateFormat("HH:mm");
-                Date datenow = new Date();
-                String tanggal_sekarang = currentDate.format(datenow);
                 String child_terbaru = "";
                 for(DataSnapshot user : datalog.getChildren()){
                     String namakey = user.getKey();
-                    String[] split = namakey.split("_");
-                    String nilaikey = split[0];
-                    if(nilaikey.equals(tanggal_sekarang)){
-                        child_terbaru = namakey;
-                    }else{
-                        child_terbaru = namakey;
-                    }
+                    child_terbaru = namakey;
                 }
+                Log.d("namaLog", child_terbaru);
                 waktu_mulai = datalog.child(child_terbaru+"/waktu_mulai").getValue(String.class);
                 waktu_berjalan = datalog.child(child_terbaru+"/waktu_berjalan").getValue(String.class);
                 Date jam_mulai = null;

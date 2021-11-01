@@ -17,6 +17,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Spo2Activity extends AppCompatActivity {
@@ -59,8 +60,8 @@ public class Spo2Activity extends AppCompatActivity {
                     for (DataSnapshot npsnapshot : dataSnapshot.getChildren()) {
                         Spo2Class l = npsnapshot.getValue(Spo2Class.class);
                         dataList.add(l);
-                        Log.i("log data snap class", "hasil data :"+dataList);
                     }
+                    Collections.reverse(dataList);
                     adapter = new Spo2Adapter(dataList);
                     recyclerView.setAdapter(adapter);
                 }
