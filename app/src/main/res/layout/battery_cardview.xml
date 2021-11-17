@@ -9,12 +9,12 @@
     android:layout_margin="5dp">
 
     <RelativeLayout
-        android:id="@+id/bpmLayout"
+        android:id="@+id/batteryLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <TextView
-            android:id="@+id/bpm_min"
+            android:id="@+id/battery_start"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="87"
@@ -23,8 +23,20 @@
             android:layout_marginLeft="40dp"
             android:layout_marginTop="10dp"
             android:layout_marginStart="40dp"
-            android:layout_toEndOf="@id/bpmLayout"
-            android:layout_toRightOf="@+id/bpmLayout"
+            android:layout_toEndOf="@id/batteryLayout"
+            android:layout_toRightOf="@id/batteryLayout"
+            tools:ignore="NotSibling" />
+
+        <TextView
+            android:id="@+id/pres_min"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="%"
+            android:textSize="15sp"
+            android:fontFamily="@font/montserratsemibold"
+            android:layout_marginTop="15dp"
+            android:layout_toEndOf="@id/battery_start"
+            android:layout_toRightOf="@+id/battery_start"
             tools:ignore="NotSibling" />
 
         <TextView
@@ -37,14 +49,14 @@
             android:layout_marginLeft="5dp"
             android:layout_marginTop="10dp"
             android:layout_marginStart="5dp"
-            android:layout_toEndOf="@id/bpm_min"
-            android:layout_toRightOf="@+id/bpm_min" />
+            android:layout_toEndOf="@id/pres_min"
+            android:layout_toRightOf="@+id/pres_min" />
 
         <TextView
-            android:id="@+id/bpm_max"
+            android:id="@+id/battery_now"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="100"
+            android:text="70"
             android:textSize="20sp"
             android:fontFamily="@font/montserratsemibold"
             android:layout_marginLeft="5dp"
@@ -53,15 +65,26 @@
             android:layout_toEndOf="@id/separator"
             android:layout_toRightOf="@+id/separator" />
 
+        <TextView
+            android:id="@+id/pres_max"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="%"
+            android:textSize="15sp"
+            android:fontFamily="@font/montserratsemibold"
+            android:layout_marginTop="15dp"
+            android:layout_toEndOf="@id/battery_now"
+            android:layout_toRightOf="@+id/battery_now" />
+
         <ImageView
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:src="@drawable/heart"
-            android:layout_marginTop="12dp"
+            android:src="@drawable/battery"
+            android:layout_marginTop="15dp"
             android:layout_marginLeft="5dp"
             android:layout_marginStart="5dp"
-            android:layout_toEndOf="@id/bpm_max"
-            android:layout_toRightOf="@+id/bpm_max"/>
+            android:layout_toEndOf="@id/pres_max"
+            android:layout_toRightOf="@+id/pres_max" />
 
         <TextView
             android:id="@+id/jam_title"
@@ -71,10 +94,11 @@
             android:textSize="10sp"
             android:fontFamily="@font/montserratmedium"
             android:layout_marginLeft="40dp"
+            android:layout_marginTop="3dp"
             android:layout_marginStart="40dp"
-            android:layout_toEndOf="@id/bpmLayout"
-            android:layout_toRightOf="@+id/bpmLayout"
-            android:layout_below="@id/bpm_min"
+            android:layout_toEndOf="@id/spo2Layout"
+            android:layout_toRightOf="@+id/spo2Layout"
+            android:layout_below="@id/battery_start"
             tools:ignore="NotSibling,SmallSp" />
 
         <TextView
@@ -85,10 +109,11 @@
             android:textSize="10sp"
             android:fontFamily="@font/montserratlight"
             android:layout_marginLeft="5dp"
+            android:layout_marginTop="4dp"
             android:layout_marginStart="5dp"
             android:layout_toEndOf="@id/jam_title"
             android:layout_toRightOf="@+id/jam_title"
-            android:layout_below="@id/bpm_min"
+            android:layout_below="@id/battery_start"
             tools:ignore="SmallSp" />
 
         <TextView
@@ -99,10 +124,11 @@
             android:textSize="10sp"
             android:fontFamily="@font/montserratmedium"
             android:layout_marginLeft="5dp"
+            android:layout_marginTop="4dp"
             android:layout_marginStart="5dp"
             android:layout_toEndOf="@id/jam_mulai"
             android:layout_toRightOf="@+id/jam_mulai"
-            android:layout_below="@id/bpm_min"
+            android:layout_below="@id/battery_start"
             tools:ignore="SmallSp" />
 
         <TextView
@@ -113,10 +139,11 @@
             android:textSize="10sp"
             android:fontFamily="@font/montserratlight"
             android:layout_marginLeft="5dp"
+            android:layout_marginTop="4dp"
             android:layout_marginStart="5dp"
             android:layout_toEndOf="@id/sep_jam"
             android:layout_toRightOf="@+id/sep_jam"
-            android:layout_below="@id/bpm_min"
+            android:layout_below="@id/battery_start"
             tools:ignore="SmallSp" />
 
         <TextView
@@ -142,7 +169,7 @@
             android:textSize="10sp"
             android:fontFamily="@font/montserratlight"
             android:layout_marginLeft="5dp"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="3dp"
             android:layout_marginStart="5dp"
             android:layout_toEndOf="@id/tanggal_title"
             android:layout_toRightOf="@+id/tanggal_title"

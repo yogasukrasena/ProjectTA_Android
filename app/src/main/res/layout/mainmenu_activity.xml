@@ -392,39 +392,39 @@
                         android:id="@+id/timeLogo"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
-                        android:src="@drawable/chronometer"
-                        android:layout_marginTop="15dp"
-                        android:layout_marginLeft="15dp"
                         android:layout_marginStart="15dp"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginTop="15dp"
                         android:layout_toEndOf="@+id/timeLayout"
                         android:layout_toRightOf="@+id/timeLayout"
-                        tools:ignore="NotSibling"/>
+                        android:src="@drawable/chronometer"
+                        tools:ignore="NotSibling" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/time"
-                        android:textSize="14sp"
-                        android:fontFamily="@font/montserratbold"
+                        android:layout_below="@+id/timeLogo"
+                        android:layout_marginStart="15dp"
                         android:layout_marginLeft="15dp"
                         android:layout_marginTop="2dp"
+                        android:fontFamily="@font/montserratbold"
+                        android:text="@string/time"
                         android:textColor="@color/white"
-                        android:layout_marginStart="15dp"
-                        android:layout_below="@+id/timeLogo"/>
+                        android:textSize="14sp" />
 
                     <TextView
                         android:id="@+id/time"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="00:20"
-                        android:textSize="28sp"
-                        android:fontFamily="@font/montserratsemibold"
-                        android:layout_marginTop="20dp"
-                        android:layout_marginLeft="20dp"
                         android:layout_marginStart="20dp"
-                        android:textColor="@color/white"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginTop="20dp"
                         android:layout_toEndOf="@+id/timeLogo"
-                        android:layout_toRightOf="@+id/timeLogo"/>
+                        android:layout_toRightOf="@+id/timeLogo"
+                        android:fontFamily="@font/montserratsemibold"
+                        android:text="00:20"
+                        android:textColor="@color/white"
+                        android:textSize="28sp" />
 
                 </RelativeLayout>
 

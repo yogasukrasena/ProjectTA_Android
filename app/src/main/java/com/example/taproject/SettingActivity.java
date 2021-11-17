@@ -387,9 +387,9 @@ public class SettingActivity extends AppCompatActivity {
                             }else{
                                 if(!hapus.getKey().equals(child_terbaru)){
                                     hapus.getRef().removeValue();
-                                    Toast.makeText(SettingActivity.this, "Data log berhasil dihapus", Toast.LENGTH_SHORT).show();
-                                    hapusLogAll.dismiss();
                                 }
+                                hapusLogAll.dismiss();
+                                Toast.makeText(SettingActivity.this, "Data log berhasil dihapus", Toast.LENGTH_SHORT).show();
                             }
                         }
                     }

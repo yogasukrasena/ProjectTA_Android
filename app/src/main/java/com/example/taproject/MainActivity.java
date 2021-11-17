@@ -131,6 +131,15 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        //onclik baterai to open baterai log
+        CardView baterai = (CardView) findViewById(R.id.cardBaterai);
+        baterai.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openBatteryActivity();
+            }
+        });
+
         //onclik setting to setting menu
         ImageView setting = (ImageView) findViewById(R.id.setting);
         setting.setOnClickListener(new View.OnClickListener() {
@@ -302,6 +311,11 @@ public class MainActivity extends AppCompatActivity {
 
     public void  openTimeActivity(){
         Intent intent = new Intent(this, TimeActivity.class);
+        startActivity(intent);
+    }
+
+    public void  openBatteryActivity(){
+        Intent intent = new Intent(this, BatteryActivity.class);
         startActivity(intent);
     }
 
