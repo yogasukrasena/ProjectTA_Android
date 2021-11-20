@@ -48,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView retriveBattery;
     private ImageView imageProfile;
     private boolean device_status = false;
+    private Integer status_device, status_gps;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,12 +74,15 @@ public class MainActivity extends AppCompatActivity {
         getData();
 
         //fungsi menampilkan foto profile
-        databaseReference.addValueEventListener(new ValueEventListener() {
+        DatabaseReference dataFotoProfile = databaseReference.child("foto_profile");
+        dataFotoProfile.addValueEventListener(new ValueEventListener() {
             String linkFoto;
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                linkFoto = snapshot.child("foto_profile").getValue(String.class);
-                showProfile(imageProfile,linkFoto);
+                if(snapshot.exists()) {
+                    linkFoto = snapshot.getValue(String.class);
+                    showProfile(imageProfile, linkFoto);
+                }
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
@@ -196,100 +200,138 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void getData(){
-        databaseReference.addValueEventListener(new ValueEventListener() {
-            Integer status_device, status_gps;
-            Integer bpm_value, baterai_value, spo_value;
-            String nama_pengguna, nama_keluarga;
-            String waktu_mulai, waktu_berjalan, count_waktu, get_waktu;
+        //mendapatkan data flag status
+        DatabaseReference dataFlagStatus = databaseReference.child("flag_status");
+        dataFlagStatus.addValueEventListener(new ValueEventListener() {
             @RequiresApi(api = Build.VERSION_CODES.M)
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                //parameter penentu status device dan gps
-                device_status = true;
-                //get data identitas pengguna alat
-                nama_pengguna = dataSnapshot.child("user_pengguna").getValue(String.class);
-                nama_keluarga = dataSnapshot.child("user_keluarga").getValue(String.class);
-
-                //get data field data flag
-                DataSnapshot dataflag = dataSnapshot.child("flag_status");
-
-                status_device = dataflag.child("status_device").getValue(Integer.class);
-                status_gps = dataflag.child("status_gps").getValue(Integer.class);
-
-                //get data field raw data
-                DataSnapshot dataraw = dataSnapshot.child("raw_data");
-
-                bpm_value = dataraw.child("bpm_level").getValue(Integer.class);
-                baterai_value = dataraw.child("battery_level").getValue(Integer.class);
-                spo_value = dataraw.child("spo2_level").getValue(Integer.class);
-
-                DataSnapshot datalog = dataSnapshot.child("log_data");
-                SimpleDateFormat df = new SimpleDateFormat("HH:mm");
-                String child_terbaru = "";
-                for(DataSnapshot user : datalog.getChildren()){
-                    String namakey = user.getKey();
-                    child_terbaru = namakey;
-                }
-                Log.d("namaLog", child_terbaru);
-                waktu_mulai = datalog.child(child_terbaru+"/waktu_mulai").getValue(String.class);
-                waktu_berjalan = datalog.child(child_terbaru+"/waktu_berjalan").getValue(String.class);
-                Date jam_mulai = null;
-                Date jam_berjalan = null;
-                try {
-                    if(waktu_berjalan == null || waktu_mulai == null){
-                        jam_mulai = df.parse(waktu_mulai);
-                        jam_berjalan = df.parse(waktu_mulai);
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.exists()){
+                    //parameter penentu status device dan gps
+                    device_status = true;
+                    status_device = snapshot.child("status_device").getValue(Integer.class);
+                    status_gps = snapshot.child("status_gps").getValue(Integer.class);
+                    //status alat
+                    if(status_device == 1){
+                        //menampilkan status connect serta kalkulasi selisih waktu pada halaman home
+                        retriveStatusDevice.setText(getString(R.string.connect));
+                        retriveStatusDevice.setTextColor(getColor(R.color.connect));
                     }else{
-                        jam_mulai = df.parse(waktu_mulai);
-                        jam_berjalan = df.parse(waktu_berjalan);
+                        retriveStatusDevice.setText(getString(R.string.disconect));
+                        retriveStatusDevice.setTextColor(getColor(R.color.disconnect));
                     }
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-                long selisih = jam_mulai.getTime() - jam_berjalan.getTime();
-
-                int days = (int) (selisih / (1000*60*60*24));
-                int hours = (int) ((selisih - (1000*60*60*24*days)) / (1000*60*60));
-                int min = (int) (selisih - (1000*60*60*24*days) - (1000*60*60*hours)) / (1000*60);
-                hours = (hours < 0 ? -hours : hours);
-                min = (min <0 ? -min : min);
-                count_waktu = String.format("%02d:%02d",hours,min);
-
-                //upload data kalkulasi selisih runing time alat ke dalam firebase
-                databaseReference.child("log_data").child(child_terbaru+"/selisih_waktu").setValue(count_waktu);
-                //get data selisih waktu
-                get_waktu = dataraw.child("selisih_data").getValue(String.class);
-
-                //set data retrive to view
-                retrivePengguna.setText(nama_pengguna);
-                retriveKeluarga.setText(nama_keluarga);
-                retriveBattery.setText(Integer.toString(baterai_value));
-                retriveBPM.setText(Integer.toString(bpm_value));
-                retriveSpo2.setText(Integer.toString(spo_value));
-                retriveRuntime.setText(get_waktu);
-
-                if(status_device == 1){
-                    //menampilkan status connect serta kalkulasi selisih waktu pada halaman home
-                    databaseReference.child("raw_data").child("selisih_data").setValue(count_waktu);
-                    retriveStatusDevice.setText(getString(R.string.connect));
-                    retriveStatusDevice.setTextColor(getColor(R.color.connect));
-                }else{
-                    retriveStatusDevice.setText(getString(R.string.disconect));
-                    retriveStatusDevice.setTextColor(getColor(R.color.disconnect));
-                }
-
-                if(status_gps == 1){
-                    retriveStatusGps.setText(getString(R.string.connect));
-                    retriveStatusGps.setTextColor(getColor(R.color.connect));
-                }else{
-                    retriveStatusGps.setText(getString(R.string.disconect));
-                    retriveStatusGps.setTextColor(getColor(R.color.disconnect));
+                    //status gps
+                    if(status_gps == 1){
+                        retriveStatusGps.setText(getString(R.string.connect));
+                        retriveStatusGps.setTextColor(getColor(R.color.connect));
+                    }else{
+                        retriveStatusGps.setText(getString(R.string.disconect));
+                        retriveStatusGps.setTextColor(getColor(R.color.disconnect));
+                    }
                 }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(MainActivity.this, "Fail to get data.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "Fail to get data status", Toast.LENGTH_SHORT).show();
+            }
+        });
+        //mendapatkan data raw data
+        DatabaseReference dataRaw = databaseReference.child("raw_data");
+        dataRaw.addValueEventListener(new ValueEventListener() {
+            Integer bpm_value, baterai_value, spo_value;
+            String get_waktu;
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.exists()){
+                    //mendapatkan nilai data pada setiap field data raw
+                    bpm_value = snapshot.child("bpm_level").getValue(Integer.class);
+                    baterai_value = snapshot.child("battery_level").getValue(Integer.class);
+                    spo_value = snapshot.child("spo2_level").getValue(Integer.class);
+                    get_waktu = snapshot.child("selisih_data").getValue(String.class);
+                    //menampilkan data pada menu home
+                    retriveBattery.setText(Integer.toString(baterai_value));
+                    retriveBPM.setText(Integer.toString(bpm_value));
+                    retriveSpo2.setText(Integer.toString(spo_value));
+                    retriveRuntime.setText(get_waktu);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(MainActivity.this, "Fail to get data raw", Toast.LENGTH_SHORT).show();
+            }
+        });
+        //mendapatkan data selisih untuk log
+        DatabaseReference dataLog = databaseReference.child("log_data");
+        dataLog.addValueEventListener(new ValueEventListener() {
+            String waktu_mulai, waktu_berjalan, count_waktu;
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.exists()){
+                    SimpleDateFormat df = new SimpleDateFormat("HH:mm");
+                    String child_terbaru = "";
+                    for(DataSnapshot user : snapshot.getChildren()){
+                        String namakey = user.getKey();
+                        child_terbaru = namakey;
+                    }
+                    Log.d("namaLog", child_terbaru);
+                    waktu_mulai = snapshot.child(child_terbaru+"/waktu_mulai").getValue(String.class);
+                    waktu_berjalan = snapshot.child(child_terbaru+"/waktu_berjalan").getValue(String.class);
+                    Date jam_mulai = null;
+                    Date jam_berjalan = null;
+                    try {
+                        if(waktu_berjalan == null || waktu_mulai == null){
+                            jam_mulai = df.parse(waktu_mulai);
+                            jam_berjalan = df.parse(waktu_mulai);
+                        }else{
+                            jam_mulai = df.parse(waktu_mulai);
+                            jam_berjalan = df.parse(waktu_berjalan);
+                        }
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    long selisih = jam_mulai.getTime() - jam_berjalan.getTime();
+
+                    int days = (int) (selisih / (1000*60*60*24));
+                    int hours = (int) ((selisih - (1000*60*60*24*days)) / (1000*60*60));
+                    int min = (int) (selisih - (1000*60*60*24*days) - (1000*60*60*hours)) / (1000*60);
+                    hours = (hours < 0 ? -hours : hours);
+                    min = (min <0 ? -min : min);
+                    count_waktu = String.format("%02d:%02d",hours,min);
+
+                    //upload data kalkulasi selisih runing time alat ke dalam firebase
+                    dataLog.child(child_terbaru+"/selisih_waktu").setValue(count_waktu);
+                    //menampilkan data selisih pada halaman utama
+                    if(status_device == 1){
+                        dataRaw.child("selisih_data").setValue(count_waktu);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(MainActivity.this, "Fail to get data selisih", Toast.LENGTH_SHORT).show();
+            }
+        });
+        //mendapatkan data pengguna tongkat dan aplikasi
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            String nama_pengguna, nama_keluarga;
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.exists()){
+                    //get data identitas pengguna alat
+                    nama_pengguna = snapshot.child("user_pengguna").getValue(String.class);
+                    nama_keluarga = snapshot.child("user_keluarga").getValue(String.class);
+                    //menampilkan data pengguna
+                    retrivePengguna.setText(nama_pengguna);
+                    retriveKeluarga.setText(nama_keluarga);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(MainActivity.this, "Fail to get data pengguna", Toast.LENGTH_SHORT).show();
             }
         });
     }

@@ -103,8 +103,10 @@ public class SettingActivity extends AppCompatActivity {
             String linkFoto;
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                linkFoto = snapshot.child("foto_profile").getValue(String.class);
-                showProfile(fotoProfile,linkFoto);
+                if(snapshot.exists()) {
+                    linkFoto = snapshot.child("foto_profile").getValue(String.class);
+                    showProfile(fotoProfile, linkFoto);
+                }
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
@@ -166,11 +168,13 @@ public class SettingActivity extends AppCompatActivity {
             String nama_pengguna, nama_keluarga;
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                nama_pengguna = dataSnapshot.child("user_pengguna").getValue(String.class);
-                nama_keluarga = dataSnapshot.child("user_keluarga").getValue(String.class);
+                if(dataSnapshot.exists()) {
+                    nama_pengguna = dataSnapshot.child("user_pengguna").getValue(String.class);
+                    nama_keluarga = dataSnapshot.child("user_keluarga").getValue(String.class);
 
-                namaKeluarga.setText(nama_keluarga, TextView.BufferType.EDITABLE);
-                namaPengguna.setText(nama_pengguna, TextView.BufferType.EDITABLE);
+                    namaKeluarga.setText(nama_keluarga, TextView.BufferType.EDITABLE);
+                    namaPengguna.setText(nama_pengguna, TextView.BufferType.EDITABLE);
+                }
             }
 
             @Override
@@ -343,10 +347,12 @@ public class SettingActivity extends AppCompatActivity {
                     String linkFoto;
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        linkFoto = snapshot.child("foto_profile").getValue(String.class);
-                        StorageReference dataFotoRef = storageReference.child("foto_profile/").child(linkFoto);
-                        Log.d("fotoHapus", String.valueOf(dataFotoRef));
-                        dataFotoRef.delete();
+                        if(snapshot.exists()) {
+                            linkFoto = snapshot.child("foto_profile").getValue(String.class);
+                            StorageReference dataFotoRef = storageReference.child("foto_profile/").child(linkFoto);
+                            Log.d("fotoHapus", String.valueOf(dataFotoRef));
+                            dataFotoRef.delete();
+                        }
                     }
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) {
@@ -372,24 +378,26 @@ public class SettingActivity extends AppCompatActivity {
                 databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        DataSnapshot datalog = snapshot.child("log_data");
-                        String child_terbaru = "";
-                        for(DataSnapshot user : datalog.getChildren()){
-                            String namakey = user.getKey();
-                            child_terbaru = namakey;
-                        }
-                        Log.d("namaLog", child_terbaru);
-                        // validasi jumlah data yang masih tersedia
-                        for(DataSnapshot hapus : datalog.getChildren()){
-                            int data = (int) datalog.getChildrenCount();
-                            if(data == 1){
-                                Toast.makeText(SettingActivity.this, "Data log sudah bersih", Toast.LENGTH_SHORT).show();
-                            }else{
-                                if(!hapus.getKey().equals(child_terbaru)){
-                                    hapus.getRef().removeValue();
+                        if(snapshot.exists()) {
+                            DataSnapshot datalog = snapshot.child("log_data");
+                            String child_terbaru = "";
+                            for (DataSnapshot user : datalog.getChildren()) {
+                                String namakey = user.getKey();
+                                child_terbaru = namakey;
+                            }
+                            Log.d("namaLog", child_terbaru);
+                            // validasi jumlah data yang masih tersedia
+                            for (DataSnapshot hapus : datalog.getChildren()) {
+                                int data = (int) datalog.getChildrenCount();
+                                if (data == 1) {
+                                    Toast.makeText(SettingActivity.this, "Data log sudah bersih", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    if (!hapus.getKey().equals(child_terbaru)) {
+                                        hapus.getRef().removeValue();
+                                    }
+                                    hapusLogAll.dismiss();
+                                    Toast.makeText(SettingActivity.this, "Data log berhasil dihapus", Toast.LENGTH_SHORT).show();
                                 }
-                                hapusLogAll.dismiss();
-                                Toast.makeText(SettingActivity.this, "Data log berhasil dihapus", Toast.LENGTH_SHORT).show();
                             }
                         }
                     }

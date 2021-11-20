@@ -2,10 +2,12 @@ package com.example.taproject;
 
 import android.os.Bundle;
 import android.view.KeyEvent;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -27,10 +29,13 @@ public class BpmActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private BpmAdapter adapter;
     private List<BpmClass> dataList;
+    private CardView noData;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.bpmlog_activity);
+
+        noData = findViewById(R.id.card_nodata);
 
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view_bpm);
         recyclerView.hasFixedSize();
@@ -64,6 +69,8 @@ public class BpmActivity extends AppCompatActivity {
                     Collections.reverse(dataList);
                     adapter = new BpmAdapter(dataList);
                     recyclerView.setAdapter(adapter);
+                }else{
+                    noData.setVisibility(View.VISIBLE);
                 }
             }
 

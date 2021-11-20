@@ -32,14 +32,20 @@ public class MapFragment extends Fragment {
 
         databaseReference = database.getReference("Device_50:02:91:C9:DF:C4");
 
-        databaseReference.addValueEventListener(new ValueEventListener() {
+        DatabaseReference dataGPS = databaseReference.child("raw_data");
+
+        dataGPS.addValueEventListener(new ValueEventListener() {
+            Double gpsLat, gpsLong;
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                DataSnapshot datagps = dataSnapshot.child("raw_data");
-
-                Double gpsLat = datagps.child("GPS_Lat").getValue(Double.class);
-                Double gpsLong = datagps.child("GPS_Long").getValue(Double.class);
-
+                if (dataSnapshot.exists()) {
+                    //mengambil data gps dari firebase
+                    gpsLat = dataSnapshot.child("GPS_Lat").getValue(Double.class);
+                    gpsLong = dataSnapshot.child("GPS_Long").getValue(Double.class);
+                }else{
+                    gpsLat = -8.7963056;
+                    gpsLong = 115.1763423;
+                }
                 //initialize maps
                 if (!isAdded()) return;
                 SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.google_maps);
@@ -51,10 +57,11 @@ public class MapFragment extends Fragment {
                         googleMap.clear();
                         LatLng pengguna = new LatLng(gpsLat, gpsLong);
                         googleMap.addMarker(new MarkerOptions().position(pengguna).title("Posisi Terkini Pengguna"));
-                        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(pengguna,18));
+                        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(pengguna, 18));
                     }
                 });
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
             }

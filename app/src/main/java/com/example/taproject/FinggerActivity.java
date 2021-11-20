@@ -34,6 +34,7 @@ public class FinggerActivity extends AppCompatActivity implements OnImageClickLi
     DatabaseReference databaseReference;
 
     private CardView tambahFinger;
+    private CardView noData;
     private TextView maxFinger;
 
     //variable dari popup
@@ -74,6 +75,7 @@ public class FinggerActivity extends AppCompatActivity implements OnImageClickLi
 
         maxFinger = findViewById(R.id.max_finger);
         tambahFinger = findViewById(R.id.tambah_sidikjari);
+        noData = findViewById(R.id.card_nodata);
         tambahFinger.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -94,48 +96,51 @@ public class FinggerActivity extends AppCompatActivity implements OnImageClickLi
 
     public void getData(){
         dataList = new ArrayList<>();
-        databaseReference.addValueEventListener(new ValueEventListener() {
+        DatabaseReference dataFinger = databaseReference.child("raw_data").child("finger_data");
+        dataFinger.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                //mengambil data status alat
-                DataSnapshot dataStatusAlat = snapshot.child("flag_status");
-                statusAlat = dataStatusAlat.child("status_device").getValue(Integer.class);
-
-                //mengambil data fingerprint dari alat
-                DataSnapshot rawData = snapshot.child("raw_data");
-                String idFinger = rawData.child("finger_data").getValue(String.class);
-                String[] separator = idFinger.split(":");
-                Integer counter = 0;
-                for(String item : separator){
-                    counter++;
-                    dataList.add(new FinggerClass(item));
-                }
-
-                //validasi tidak menampilkan opsi tambah finger ketika sudah
-                //terdapat 5 finger yang terdaftar
-                if(counter >= 5){
-                    tambahFinger.setVisibility(View.GONE);
-                    maxFinger.setVisibility(View.VISIBLE);
-                }else{
-                    tambahFinger.setVisibility(View.VISIBLE);
-                    maxFinger.setVisibility(View.GONE);
-                }
-
-                //penentuan id finger ketika ingin menambahkan finger baru
-                Integer lastFingerId = 0, i = 0;
-                for(String add : separator){
-                    lastFingerId = Integer.parseInt(add);
-                    i++;
-                    if(!i.equals(lastFingerId)){
-                        lastFingerId = i;
-                        break;
-                    }else{
-                        lastFingerId = Integer.parseInt(add)+1;
+                if(snapshot.exists()) {
+                    //mengambil data fingerprint dari alat
+                    String idFinger = snapshot.getValue(String.class);
+                    String[] separator = idFinger.split(":");
+                    String lastData = "";
+                    Integer counter = 0;
+                    for (String item : separator) {
+                        counter++;
+                        lastData = item;
+                        dataList.add(new FinggerClass(item));
                     }
-                    Log.d("dataSpace", String.valueOf(lastFingerId));
+                    Log.d("hasilSplit", lastData);
+                    //validasi tidak menampilkan opsi tambah finger ketika sudah
+                    //terdapat 5 finger yang terdaftar
+                    if (counter >= 5) {
+                        tambahFinger.setVisibility(View.GONE);
+                        maxFinger.setVisibility(View.VISIBLE);
+                    } else if (lastData.equals("0")){
+                        tambahFinger.setVisibility(View.VISIBLE);
+                        noData.setVisibility(View.VISIBLE);
+                    } else {
+                        tambahFinger.setVisibility(View.VISIBLE);
+                        maxFinger.setVisibility(View.GONE);
+                    }
+
+                    //penentuan id finger ketika ingin menambahkan finger baru
+                    Integer lastFingerId = 0, i = 0;
+                    for (String add : separator) {
+                        lastFingerId = Integer.parseInt(add);
+                        i++;
+                        if (!i.equals(lastFingerId)) {
+                            lastFingerId = i;
+                            break;
+                        } else {
+                            lastFingerId = Integer.parseInt(add) + 1;
+                        }
+                        Log.d("dataSpace", String.valueOf(lastFingerId));
+                    }
+                    rollFingerId = "enfinger" + lastFingerId.toString();
+                    Log.d("dataRoll", rollFingerId);
                 }
-                rollFingerId = "enfinger"+lastFingerId.toString();
-                Log.d("dataRoll", rollFingerId);
             }
 
             @Override
@@ -204,44 +209,48 @@ public class FinggerActivity extends AppCompatActivity implements OnImageClickLi
         //button trigger untuk kembali
         kembali = scan_finger.findViewById(R.id.kembali);
 
+        //lokasi field database penambahan sidik jari
+        DatabaseReference dataFingerStatus = databaseReference.child("flag_status").child("status_finger");
+
         //fungsi mendapatkan data status finger
         rollEventListener = new ValueEventListener() {
             Integer none_status;
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                DataSnapshot rollFinger = snapshot.child("flag_status");
-                statusFinger = rollFinger.child("status_finger").getValue(String.class);
+                if(snapshot.exists()) {
+                    statusFinger = snapshot.getValue(String.class);
 
-                kembali.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (!statusFinger.equals("noneAction")){
-                            databaseReference.child("flag_status")
-                                    .child("status_finger")
-                                    .setValue("done0");
-                            Toast.makeText(FinggerActivity.this, "Penambahan sidik jari berhasil", Toast.LENGTH_SHORT).show();
-                            finish();
+                    kembali.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if (!statusFinger.equals("noneAction")) {
+                                databaseReference.child("flag_status")
+                                        .child("status_finger")
+                                        .setValue("done0");
+                                Toast.makeText(FinggerActivity.this, "Penambahan sidik jari berhasil", Toast.LENGTH_SHORT).show();
+                                finish();
+                            }
+                            none_status = 1;
+                            Log.d("statusFinger", statusFinger.toString());
                         }
-                        none_status = 1;
-                        Log.d("statusFinger", statusFinger.toString());
-                    }
-                });
+                    });
 
-                if(statusFinger.equals(rollFingerId)){
-                    pemanduStatus.setText("Mulai melakukan scan sidik jari..");
-                    kembali.setVisibility(View.GONE);
-                }else if(statusFinger.equals("firstPlace")){
-                    pemanduStatus.setText("Letakan sidik jari pengguna..");
-                    kembali.setVisibility(View.GONE);
-                }else if(statusFinger.equals("placeAgain")){
-                    pemanduStatus.setText("Letakan sidik jari sekali lagi..");
-                    kembali.setVisibility(View.GONE);
-                }else if(statusFinger.equals("fail")){
-                    pemanduStatus.setText("Sidik jari tidak sesuai, gagal disimpan..");
-                    kembali.setVisibility(View.VISIBLE);
-                }else if(statusFinger.equals("enDone")){
-                    pemanduStatus.setText("Sidik jari berhasil ditambahkan..");
-                    kembali.setVisibility(View.VISIBLE);
+                    if (statusFinger.equals(rollFingerId)) {
+                        pemanduStatus.setText("Mulai melakukan scan sidik jari..");
+                        kembali.setVisibility(View.GONE);
+                    } else if (statusFinger.equals("firstPlace")) {
+                        pemanduStatus.setText("Letakan sidik jari pengguna..");
+                        kembali.setVisibility(View.GONE);
+                    } else if (statusFinger.equals("placeAgain")) {
+                        pemanduStatus.setText("Letakan sidik jari sekali lagi..");
+                        kembali.setVisibility(View.GONE);
+                    } else if (statusFinger.equals("fail")) {
+                        pemanduStatus.setText("Sidik jari tidak sesuai, gagal disimpan..");
+                        kembali.setVisibility(View.VISIBLE);
+                    } else if (statusFinger.equals("enDone")) {
+                        pemanduStatus.setText("Sidik jari berhasil ditambahkan..");
+                        kembali.setVisibility(View.VISIBLE);
+                    }
                 }
             }
             @Override
@@ -249,7 +258,7 @@ public class FinggerActivity extends AppCompatActivity implements OnImageClickLi
                 Toast.makeText(FinggerActivity.this, "Data gagal didapatkan", Toast.LENGTH_SHORT).show();
             }
         };
-        databaseReference.addValueEventListener(rollEventListener);
+        dataFingerStatus.addValueEventListener(rollEventListener);
     }
 
     public void validasiDel(String fingger_id){
@@ -305,38 +314,39 @@ public class FinggerActivity extends AppCompatActivity implements OnImageClickLi
         hapus_kembali = hapus_finger.findViewById(R.id.kembali);
         hapusStatus = hapus_finger.findViewById(R.id.status_hapus);
 
-        String id = "delfinger"+fingger_id;
+        //lokasi field database penambahan sidik jari
+        DatabaseReference dataFingerStatus = databaseReference.child("flag_status").child("status_finger");
 
-        databaseReference.child("flag_status")
-                .child("status_finger")
-                .setValue(id);
+        String id = "delfinger"+fingger_id;
+        dataFingerStatus.setValue(id);
 
         delEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                DataSnapshot delFinger = snapshot.child("flag_status");
-                statusFinger = delFinger.child("status_finger").getValue(String.class);
+                if(snapshot.exists()) {
+                    statusFinger = snapshot.getValue(String.class);
 
-                hapus_kembali.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (!statusFinger.equals("noneAction")){
-                            databaseReference.child("flag_status")
-                                    .child("status_finger")
-                                    .setValue("done0");
-                            Toast.makeText(FinggerActivity.this, "Hapus fingerprint berhasil", Toast.LENGTH_SHORT).show();
-                            finish();
+                    hapus_kembali.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if (!statusFinger.equals("noneAction")) {
+                                databaseReference.child("flag_status")
+                                        .child("status_finger")
+                                        .setValue("done0");
+                                Toast.makeText(FinggerActivity.this, "Hapus fingerprint berhasil", Toast.LENGTH_SHORT).show();
+                                finish();
+                            }
                         }
-                    }
-                });
+                    });
 
-                if(statusFinger.equals(id)){
-                    hapusStatus.setText("Mohon tunggu hingga proses selesai..");
-                    delFingerSuccess.setVisibility(View.VISIBLE);
-                }else if(statusFinger.equals("delDone")){
-                    hapusStatus.setText("Hapus fingerprint berhasil");
-                    delFingerSuccess.setVisibility(View.VISIBLE);
-                    hapus_kembali.setVisibility(View.VISIBLE);
+                    if (statusFinger.equals(id)) {
+                        hapusStatus.setText("Mohon tunggu hingga proses selesai..");
+                        delFingerSuccess.setVisibility(View.VISIBLE);
+                    } else if (statusFinger.equals("delDone")) {
+                        hapusStatus.setText("Hapus fingerprint berhasil");
+                        delFingerSuccess.setVisibility(View.VISIBLE);
+                        hapus_kembali.setVisibility(View.VISIBLE);
+                    }
                 }
             }
 
@@ -345,7 +355,7 @@ public class FinggerActivity extends AppCompatActivity implements OnImageClickLi
                 Toast.makeText(FinggerActivity.this, "Data gagal didapatkan", Toast.LENGTH_SHORT).show();
             }
         };
-        databaseReference.addValueEventListener(delEventListener);
+        dataFingerStatus.addValueEventListener(delEventListener);
     }
 
     @Override

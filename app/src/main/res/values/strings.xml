@@ -23,4 +23,5 @@
     <string name="desc_foto">Pilih gambar yang ingin di upload atau ambil gambar</string>
     <string name="ambil_foto">Ambil Gambar</string>
     <string name="pilih_foto">Cari Gambar</string>
+    <string name="no_data">Data Tidak Tersedia</string>
 </resources>

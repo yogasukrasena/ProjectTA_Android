@@ -3,9 +3,11 @@ package com.example.taproject;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -26,11 +28,14 @@ public class Spo2Activity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private Spo2Adapter adapter;
     private List<Spo2Class> dataList;
+    private CardView noData;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.spo_activity);
+
+        noData = findViewById(R.id.card_nodata);
 
         recyclerView = (RecyclerView) findViewById(R.id.recyler_view_spo);
         recyclerView.hasFixedSize();
@@ -64,6 +69,8 @@ public class Spo2Activity extends AppCompatActivity {
                     Collections.reverse(dataList);
                     adapter = new Spo2Adapter(dataList);
                     recyclerView.setAdapter(adapter);
+                }else{
+                    noData.setVisibility(View.VISIBLE);
                 }
             }
             @Override

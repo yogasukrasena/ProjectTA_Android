@@ -3,10 +3,12 @@ package com.example.taproject;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -33,10 +35,14 @@ public class TimeActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private TimeAdapter adapter;
     private List<TimeClass> dataList;
+    private CardView noData;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.time_activity);
+
+        noData = findViewById(R.id.card_nodata);
 
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view_time);
         recyclerView.hasFixedSize();
@@ -70,6 +76,8 @@ public class TimeActivity extends AppCompatActivity {
                     Collections.reverse(dataList);
                     adapter = new TimeAdapter(dataList);
                     recyclerView.setAdapter(adapter);
+                }else{
+                    noData.setVisibility(View.VISIBLE);
                 }
             }
 

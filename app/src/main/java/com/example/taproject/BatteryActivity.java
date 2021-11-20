@@ -2,10 +2,12 @@ package com.example.taproject;
 
 import android.os.Bundle;
 import android.view.KeyEvent;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -26,11 +28,14 @@ public class BatteryActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private BatteryAdapter adapter;
     private List<BatteryClass> dataList;
+    private CardView noData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.battery_activity);
+
+        noData = findViewById(R.id.card_nodata);
 
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view_battery);
         recyclerView.hasFixedSize();
@@ -64,6 +69,8 @@ public class BatteryActivity extends AppCompatActivity {
                     Collections.reverse(dataList);
                     adapter = new BatteryAdapter(dataList);
                     recyclerView.setAdapter(adapter);
+                }else{
+                    noData.setVisibility(View.VISIBLE);
                 }
             }
             @Override
