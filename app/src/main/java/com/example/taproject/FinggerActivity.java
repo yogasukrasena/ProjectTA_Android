@@ -76,6 +76,7 @@ public class FinggerActivity extends AppCompatActivity implements OnImageClickLi
         maxFinger = findViewById(R.id.max_finger);
         tambahFinger = findViewById(R.id.tambah_sidikjari);
         noData = findViewById(R.id.card_nodata);
+
         tambahFinger.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -140,6 +141,8 @@ public class FinggerActivity extends AppCompatActivity implements OnImageClickLi
                     }
                     rollFingerId = "enfinger" + lastFingerId.toString();
                     Log.d("dataRoll", rollFingerId);
+                }else{
+                    noData.setVisibility(View.VISIBLE);
                 }
             }
 
@@ -148,6 +151,22 @@ public class FinggerActivity extends AppCompatActivity implements OnImageClickLi
                 Toast.makeText(FinggerActivity.this, "Data gagal didapatkan", Toast.LENGTH_SHORT).show();
             }
         });
+        //mendapatkan data status device
+        DatabaseReference status_alat = databaseReference.child("flag_status").child("status_device");
+        status_alat.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.exists()){
+                    statusAlat = snapshot.getValue(Integer.class);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(FinggerActivity.this, "Data gagal didapatkan", Toast.LENGTH_SHORT).show();
+            }
+        });
+
     }
 
     public void validasiRoll(){

@@ -399,6 +399,8 @@ public class SettingActivity extends AppCompatActivity {
                                     Toast.makeText(SettingActivity.this, "Data log berhasil dihapus", Toast.LENGTH_SHORT).show();
                                 }
                             }
+                        }else{
+                            Toast.makeText(SettingActivity.this, "Data log tidak tersedia", Toast.LENGTH_SHORT).show();
                         }
                     }
 
