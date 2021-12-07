@@ -164,13 +164,13 @@ public class SettingActivity extends AppCompatActivity {
         namaPengguna = (EditText) findViewById(R.id.username_tongkat);
         namaKeluarga = (EditText) findViewById(R.id.username_keluarga);
 
-        databaseReference.addValueEventListener(new ValueEventListener() {
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             String nama_pengguna, nama_keluarga;
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if(dataSnapshot.exists()) {
-                    nama_pengguna = dataSnapshot.child("user_pengguna").getValue(String.class);
-                    nama_keluarga = dataSnapshot.child("user_keluarga").getValue(String.class);
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.exists()) {
+                    nama_pengguna = snapshot.child("user_pengguna").getValue(String.class);
+                    nama_keluarga = snapshot.child("user_keluarga").getValue(String.class);
 
                     namaKeluarga.setText(nama_keluarga, TextView.BufferType.EDITABLE);
                     namaPengguna.setText(nama_pengguna, TextView.BufferType.EDITABLE);
@@ -178,7 +178,7 @@ public class SettingActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
+            public void onCancelled(@NonNull DatabaseError error) {
                 Toast.makeText(SettingActivity.this, "Fail to get data.", Toast.LENGTH_SHORT).show();
             }
         });
@@ -194,10 +194,10 @@ public class SettingActivity extends AppCompatActivity {
     public void showProfile(ImageView imageView, String linkFoto){
         StorageReference dataFotoRef = storageReference.child("foto_profile/").child(linkFoto);
         if(linkFoto.equals("default_foto")){
-            Glide.with(SettingActivity.this).load(getDefaultImage("man")).into(imageView);
+            Glide.with(getApplicationContext()).load(getDefaultImage("man")).into(imageView);
         }else{
-            if(!SettingActivity.this.isFinishing()){
-                Glide.with(SettingActivity.this).load(dataFotoRef).into(imageView);
+            if(!this.isFinishing()){
+                Glide.with(getApplicationContext()).load(dataFotoRef).into(imageView);
                 Log.d("getFoto", String.valueOf(dataFotoRef));
             }
         }
@@ -219,6 +219,7 @@ public class SettingActivity extends AppCompatActivity {
         }else {
             databaseReference.child("user_keluarga").setValue(nama_keluarga);
             databaseReference.child("user_pengguna").setValue(nama_pengguna);
+            getData();
             Toast.makeText(SettingActivity.this, "Data berhasil tersimpan", Toast.LENGTH_SHORT).show();
         }
     }
@@ -376,28 +377,39 @@ public class SettingActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                    int statusDevice;
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         if(snapshot.exists()) {
+                            statusDevice = snapshot.child("flag_status").child("status_device").getValue(Integer.class);
                             DataSnapshot datalog = snapshot.child("log_data");
                             String child_terbaru = "";
                             for (DataSnapshot user : datalog.getChildren()) {
                                 String namakey = user.getKey();
                                 child_terbaru = namakey;
                             }
-                            Log.d("namaLog", child_terbaru);
                             // validasi jumlah data yang masih tersedia
-                            for (DataSnapshot hapus : datalog.getChildren()) {
-                                int data = (int) datalog.getChildrenCount();
-                                if (data == 1) {
+                            int data = (int) datalog.getChildrenCount();
+                            if(statusDevice == 1){
+                                if(data == 1){
                                     Toast.makeText(SettingActivity.this, "Data log sudah bersih", Toast.LENGTH_SHORT).show();
-                                } else {
-                                    if (!hapus.getKey().equals(child_terbaru)) {
-                                        hapus.getRef().removeValue();
+                                }else{
+                                    //hapus data log selain data terakhir
+                                    for (DataSnapshot hapus : datalog.getChildren()) {
+                                        if (!hapus.getKey().equals(child_terbaru)) {
+                                            hapus.getRef().removeValue();
+                                        }
                                     }
                                     hapusLogAll.dismiss();
                                     Toast.makeText(SettingActivity.this, "Data log berhasil dihapus", Toast.LENGTH_SHORT).show();
                                 }
+                            }else{
+                                //hapus semua data log
+                                for (DataSnapshot hapus : datalog.getChildren()) {
+                                    hapus.getRef().removeValue();
+                                }
+                                hapusLogAll.dismiss();
+                                Toast.makeText(SettingActivity.this, "Data log berhasil dihapus", Toast.LENGTH_SHORT).show();
                             }
                         }else{
                             Toast.makeText(SettingActivity.this, "Data log tidak tersedia", Toast.LENGTH_SHORT).show();

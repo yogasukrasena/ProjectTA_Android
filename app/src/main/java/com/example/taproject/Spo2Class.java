@@ -20,11 +20,11 @@ public class Spo2Class {
     }
 
     public Integer getSpo_max(){
-        return spo_min;
+        return spo_max;
     }
 
     public Integer getSpo_min(){
-        return spo_max;
+        return spo_min;
     }
 
     public String getTanggal(){

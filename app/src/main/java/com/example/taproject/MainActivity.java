@@ -192,9 +192,9 @@ public class MainActivity extends AppCompatActivity {
     public void showProfile(ImageView imageView, String linkFoto){
         StorageReference dataFotoRef = storageReference.child("foto_profile/").child(linkFoto);
         if(linkFoto.equals("default_foto")){
-            Glide.with(this).load(getDefaultImage("man")).into(imageView);
+            Glide.with(getApplicationContext()).load(getDefaultImage("man")).into(imageView);
         }else{
-            Glide.with(this).load(dataFotoRef).into(imageView);
+            Glide.with(getApplicationContext()).load(dataFotoRef).into(imageView);
             Log.d("getFoto", String.valueOf(dataFotoRef));
         }
     }
@@ -236,6 +236,7 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(MainActivity.this, "Fail to get data status", Toast.LENGTH_SHORT).show();
             }
         });
+
         //mendapatkan data raw data
         DatabaseReference dataRaw = databaseReference.child("raw_data");
         dataRaw.addValueEventListener(new ValueEventListener() {
@@ -314,6 +315,7 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(MainActivity.this, "Fail to get data selisih", Toast.LENGTH_SHORT).show();
             }
         });
+
         //mendapatkan data pengguna tongkat dan aplikasi
         databaseReference.addValueEventListener(new ValueEventListener() {
             String nama_pengguna, nama_keluarga;

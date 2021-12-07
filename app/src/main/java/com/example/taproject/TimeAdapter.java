@@ -43,8 +43,9 @@ public class TimeAdapter extends RecyclerView.Adapter<TimeAdapter.TimeViewHolder
 
     @Override
     public void onBindViewHolder(TimeViewHolder holder, int position) {
-        databaseReference = database.getReference("Device_50:02:91:C9:DF:C4").child("log_data");
-        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+        databaseReference = database.getReference("Device_50:02:91:C9:DF:C4");
+        DatabaseReference dataLog = databaseReference.child("log_data");
+        dataLog.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(snapshot.exists()){
