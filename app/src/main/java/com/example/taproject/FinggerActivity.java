@@ -248,9 +248,14 @@ public class FinggerActivity extends AppCompatActivity implements OnImageClickLi
                                         .setValue("done0");
                                 Toast.makeText(FinggerActivity.this, "Penambahan sidik jari berhasil", Toast.LENGTH_SHORT).show();
                                 finish();
+                            } else if(statusFinger.equals("fail")){
+                                databaseReference.child("flag_status")
+                                        .child("status_finger")
+                                        .setValue("done0");
+                                Toast.makeText(FinggerActivity.this, "Penambahan sidik jari gagal", Toast.LENGTH_SHORT).show();
+                                finish();
                             }
                             none_status = 1;
-                            Log.d("statusFinger", statusFinger.toString());
                         }
                     });
 
@@ -354,6 +359,12 @@ public class FinggerActivity extends AppCompatActivity implements OnImageClickLi
                                         .setValue("done0");
                                 Toast.makeText(FinggerActivity.this, "Hapus fingerprint berhasil", Toast.LENGTH_SHORT).show();
                                 finish();
+                            } else if(statusFinger.equals("fail")){
+                                databaseReference.child("flag_status")
+                                        .child("status_finger")
+                                        .setValue("done0");
+                                Toast.makeText(FinggerActivity.this, "Hapus fingerprint gagal", Toast.LENGTH_SHORT).show();
+                                finish();
                             }
                         }
                     });
@@ -361,6 +372,9 @@ public class FinggerActivity extends AppCompatActivity implements OnImageClickLi
                     if (statusFinger.equals(id)) {
                         hapusStatus.setText("Mohon tunggu hingga proses selesai..");
                         delFingerSuccess.setVisibility(View.VISIBLE);
+                    } else if (statusFinger.equals("fail")) {
+                        hapusStatus.setText("Sidik jari gagal dihapus..");
+                        hapus_kembali.setVisibility(View.VISIBLE);
                     } else if (statusFinger.equals("delDone")) {
                         hapusStatus.setText("Hapus fingerprint berhasil");
                         delFingerSuccess.setVisibility(View.VISIBLE);

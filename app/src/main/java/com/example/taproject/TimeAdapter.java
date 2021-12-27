@@ -51,35 +51,37 @@ public class TimeAdapter extends RecyclerView.Adapter<TimeAdapter.TimeViewHolder
                 if(snapshot.exists()){
                     for(DataSnapshot data : snapshot.getChildren()){
                         String childNama = data.getKey();
-
+                        String count_waktu = "";
                         String waktu_mulai = snapshot.child(childNama+"/waktu_mulai").getValue(String.class);
                         String waktu_berjalan = snapshot.child(childNama+"/waktu_berjalan").getValue(String.class);
 
-                        SimpleDateFormat df = new SimpleDateFormat("HH:mm");
-                        Date jam_mulai = null;
-                        Date jam_berjalan = null;
-                        try {
-                            if(waktu_berjalan == null || waktu_mulai == null){
-                                jam_mulai = df.parse(waktu_mulai);
-                                jam_berjalan = df.parse(waktu_mulai);
-                            }else{
-                                jam_mulai = df.parse(waktu_mulai);
-                                jam_berjalan = df.parse(waktu_berjalan);
+                        if(waktu_mulai.isEmpty() || waktu_berjalan.isEmpty()){
+                            count_waktu = "00:00";
+                        }else {
+                            SimpleDateFormat df = new SimpleDateFormat("HH:mm");
+                            Date jam_mulai = null;
+                            Date jam_berjalan = null;
+                            try {
+                                if (waktu_berjalan == null || waktu_mulai == null) {
+                                    jam_mulai = df.parse(waktu_mulai);
+                                    jam_berjalan = df.parse(waktu_mulai);
+                                } else {
+                                    jam_mulai = df.parse(waktu_mulai);
+                                    jam_berjalan = df.parse(waktu_berjalan);
+                                }
+                            } catch (ParseException e) {
+                                e.printStackTrace();
                             }
-                        } catch (ParseException e) {
-                            e.printStackTrace();
+                            long selisih = jam_mulai.getTime() - jam_berjalan.getTime();
+
+                            int days = (int) (selisih / (1000 * 60 * 60 * 24));
+                            int hours = (int) ((selisih - (1000 * 60 * 60 * 24 * days)) / (1000 * 60 * 60));
+                            int min = (int) (selisih - (1000 * 60 * 60 * 24 * days) - (1000 * 60 * 60 * hours)) / (1000 * 60);
+                            hours = (hours < 0 ? -hours : hours);
+                            min = (min < 0 ? -min : min);
+                            count_waktu = String.format("%02d:%02d", hours, min);
                         }
-                        long selisih = jam_mulai.getTime() - jam_berjalan.getTime();
-
-                        int days = (int) (selisih / (1000*60*60*24));
-                        int hours = (int) ((selisih - (1000*60*60*24*days)) / (1000*60*60));
-                        int min = (int) (selisih - (1000*60*60*24*days) - (1000*60*60*hours)) / (1000*60);
-                        hours = (hours < 0 ? -hours : hours);
-                        min = (min <0 ? -min : min);
-                        String count_waktu = String.format("%02d:%02d",hours,min);
-
                         databaseReference.child("log_data").child(childNama+"/selisih_waktu").setValue(count_waktu);
-                        Log.d("namaLog",childNama);
                     }
                 }
             }
