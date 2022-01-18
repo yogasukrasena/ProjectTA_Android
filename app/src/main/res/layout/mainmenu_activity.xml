@@ -19,8 +19,7 @@
         android:textColor="@color/biru_name"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        />
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <TextView
         android:id="@+id/nama_keluarga"
@@ -90,6 +89,19 @@
         app:layout_constraintVertical_bias="0.04"
         android:alpha="0.3"
         tools:ignore="ContentDescription"/>
+
+    <ImageView
+        android:id="@+id/notif_ada"
+        android:src="@drawable/red_solid_circle"
+        android:layout_width="10dp"
+        android:layout_height="10dp"
+        app:layout_constraintHorizontal_bias="0.40"
+        app:layout_constraintStart_toEndOf="@id/setting"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.40"
+        android:layout_marginTop="45dp"
+        android:layout_marginLeft="23dp"
+        android:visibility="gone"/>
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/foto_profile"

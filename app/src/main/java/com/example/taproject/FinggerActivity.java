@@ -112,7 +112,7 @@ public class FinggerActivity extends AppCompatActivity implements OnImageClickLi
                         lastData = item;
                         dataList.add(new FinggerClass(item));
                     }
-                    Log.d("hasilSplit", lastData);
+
                     //validasi tidak menampilkan opsi tambah finger ketika sudah
                     //terdapat 5 finger yang terdaftar
                     if (counter >= 5) {

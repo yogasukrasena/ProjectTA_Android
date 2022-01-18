@@ -4,11 +4,19 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.annotation.SuppressLint;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Intent;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -47,13 +55,19 @@ public class MainActivity extends AppCompatActivity {
     private TextView retriveKeluarga;
     private TextView retriveBattery;
     private ImageView imageProfile;
+    private ImageView notifImage;
     private boolean device_status = false;
-    private Integer status_device, status_gps;
+    private String tanggal, waktu, notifLog;
+    private String dataNotifikasi, lokasiData, statusLokasi;
+    private Double gpsLat, gpsLong;
+    private Integer status_device, status_gps, status_tombol, status_notif;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.mainmenu_activity);
+
+        startService(new Intent(this, NotificationService.class));
 
         //call database reference and retrive to view
         databaseReference = database.getReference("Device_50:02:91:C9:DF:C4");
@@ -69,6 +83,7 @@ public class MainActivity extends AppCompatActivity {
         retriveBattery = findViewById(R.id.baterai);
         retriveRuntime = findViewById(R.id.time);
         imageProfile = findViewById(R.id.foto_profile);
+        notifImage = findViewById(R.id.notif_ada);
         //call function
         refreshData();
         getData();
@@ -153,6 +168,15 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        //onclik notifikasi to setting menu
+        ImageView  notifIcon = (ImageView) findViewById(R.id.notifikasi);
+        notifIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openNotifActivity();
+            }
+        });
+
         final SwipeRefreshLayout pullToRefresh = findViewById(R.id.pullToRefreshMain);
         pullToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -211,6 +235,8 @@ public class MainActivity extends AppCompatActivity {
                     device_status = true;
                     status_device = snapshot.child("status_device").getValue(Integer.class);
                     status_gps = snapshot.child("status_gps").getValue(Integer.class);
+                    status_tombol = snapshot.child("status_button").getValue(Integer.class);
+                    status_notif = snapshot.child("status_notifikasi").getValue(Integer.class);
                     //status alat
                     if(status_device == 1){
                         //menampilkan status connect serta kalkulasi selisih waktu pada halaman home
@@ -224,9 +250,21 @@ public class MainActivity extends AppCompatActivity {
                     if(status_gps == 1){
                         retriveStatusGps.setText(getString(R.string.connect));
                         retriveStatusGps.setTextColor(getColor(R.color.connect));
+                        statusLokasi = "Terkoneksi. ";
                     }else{
                         retriveStatusGps.setText(getString(R.string.disconect));
                         retriveStatusGps.setTextColor(getColor(R.color.disconnect));
+                        statusLokasi = "Tidak Terkoneksi. ";
+                    }
+                    //status tombol notifikasi
+                    if(status_tombol == 5){
+                        notificationPengguna();
+                    }
+                    //tanda notifikasi
+                    if(status_notif == 1){
+                        notifImage.setVisibility(View.VISIBLE);
+                    }else{
+                        notifImage.setVisibility(View.GONE);
                     }
                 }
             }
@@ -250,6 +288,19 @@ public class MainActivity extends AppCompatActivity {
                     baterai_value = snapshot.child("battery_level").getValue(Integer.class);
                     spo_value = snapshot.child("spo2_level").getValue(Integer.class);
                     get_waktu = snapshot.child("selisih_data").getValue(String.class);
+                    gpsLat = snapshot.child("GPS_Lat").getValue(Double.class);
+                    gpsLong = snapshot.child("GPS_Long").getValue(Double.class);
+                    lokasiData = "https://maps.google.com/?q="+gpsLat+","+gpsLong;
+                    //mengirimkan notifikasi berdasarkan kondisi baterai
+                    if(baterai_value == 20 || baterai_value == 10){
+                        dataNotifikasi = "Baterai perangkat lemah, sisa: "+baterai_value+"%. Status lokasi perangkat adalah : "+statusLokasi+
+                                "Klik untuk melihat lokasi terakhir perangkat.";
+                        notificationPerangkat();
+                    }else if(baterai_value == 5 || baterai_value <= 3 && baterai_value > 0){
+                        dataNotifikasi = "Baterai perangkat habis, sisa: "+baterai_value+"%. Status lokasi perangkat adalah : "+statusLokasi+
+                                "Klik untuk melihat lokasi terakhir perangkat.";
+                        notificationPerangkat();
+                    }
                     //menampilkan data pada menu home
                     retriveBattery.setText(Integer.toString(baterai_value));
                     retriveBPM.setText(Integer.toString(bpm_value));
@@ -338,6 +389,111 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    public String dataTanggal(){
+        SimpleDateFormat getTgl = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat getWkt = new SimpleDateFormat("HH:mm");
+
+        tanggal = getTgl.format(new Date());
+        waktu = getWkt.format(new Date());
+
+        notifLog = tanggal+"_"+waktu;
+
+        return notifLog;
+    }
+
+    public void notificationPengguna(){
+        //menentukan data dalam notifikasi
+        String judulNotif = "Pesan Dari Pengguna";
+        dataNotifikasi = "Pengguna perangkat meminta untuk dijemput. Status lokasi perangkat adalah : "+statusLokasi+
+                "Klik untuk melihat lokasi terakhir perangkat.";
+
+        //fungsi akses menu dari notifikasi
+        Intent intent = new Intent(this, NotifActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this,0, intent, PendingIntent.FLAG_ONE_SHOT);
+        //build notifikasi yang ditampilkan
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            NotificationChannel channel = new NotificationChannel("n","n", NotificationManager.IMPORTANCE_HIGH);
+            channel.enableLights(true);
+            channel.enableVibration(true);
+            channel.setLightColor(R.color.white);
+            channel.setDescription(judulNotif);
+
+            NotificationManager manager = getSystemService(NotificationManager.class);
+            manager.createNotificationChannel(channel);
+        }
+        //menentukan suara dan getaran notifikasi masuk
+        Uri uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        long[] vibrate = {500,500};
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this,"n")
+                .setSmallIcon(R.mipmap.blind_stick)
+                .setContentTitle(judulNotif)
+                .setContentText("Jemput Pengguna")
+                .setStyle(new NotificationCompat.BigTextStyle().bigText(dataNotifikasi))
+                .setAutoCancel(true)
+                .setSound(uri)
+                .setVibrate(vibrate)
+                .setPriority(NotificationCompat.PRIORITY_MAX)
+                .setContentIntent(pendingIntent);
+
+        NotificationManagerCompat managerCompat = NotificationManagerCompat.from(this);
+        managerCompat.notify(1, builder.build());
+
+        //mengirimkan data notifikasi kedalam firebase
+        databaseReference.child("flag_status/status_notifikasi").setValue(1);
+        databaseReference.child("notif_data/"+dataTanggal()+"/jenis_pesan").setValue(judulNotif);
+        databaseReference.child("notif_data/"+dataTanggal()+"/tanggal").setValue(tanggal);
+        databaseReference.child("notif_data/"+dataTanggal()+"/waktu").setValue(waktu);
+        databaseReference.child("notif_data/"+dataTanggal()+"/isi_pesan").setValue(dataNotifikasi);
+        databaseReference.child("notif_data/"+dataTanggal()+"/url").setValue(lokasiData);
+    }
+
+    public void notificationPerangkat(){
+        //menentukan isi dan judul pesan
+        String judulPesan = "Pesan Dari Perangkat";
+        //fungsi akses menu dari notifikasi
+        Intent intent = new Intent(this, NotifActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this,0, intent, PendingIntent.FLAG_ONE_SHOT);
+        //build notifikasi yang ditampilkan
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            NotificationChannel channel = new NotificationChannel("n","n", NotificationManager.IMPORTANCE_HIGH);
+            channel.enableLights(true);
+            channel.enableVibration(true);
+            channel.setLightColor(R.color.white);
+            channel.setDescription(judulPesan);
+
+            NotificationManager manager = getSystemService(NotificationManager.class);
+            manager.createNotificationChannel(channel);
+        }
+        //menentukan suara dan getaran dari notifikasi
+        Uri uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        long[] vibrate = {500,500};
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this,"n")
+                .setSmallIcon(R.mipmap.blind_stick)
+                .setContentTitle(judulPesan)
+                .setContentText("Baterai Perangkat Lemah")
+                .setStyle(new NotificationCompat.BigTextStyle().bigText(dataNotifikasi))
+                .setAutoCancel(true)
+                .setSound(uri)
+                .setVibrate(vibrate)
+                .setPriority(NotificationCompat.PRIORITY_MAX)
+                .setContentIntent(pendingIntent);
+
+        NotificationManagerCompat managerCompat = NotificationManagerCompat.from(this);
+        managerCompat.notify(2, builder.build());
+
+        //mengirimkan data notifikasi kedalam firebase
+        databaseReference.child("flag_status/status_notifikasi").setValue(1);
+        databaseReference.child("notif_data/"+dataTanggal()+"/jenis_pesan").setValue(judulPesan);
+        databaseReference.child("notif_data/"+dataTanggal()+"/tanggal").setValue(tanggal);
+        databaseReference.child("notif_data/"+dataTanggal()+"/waktu").setValue(waktu);
+        databaseReference.child("notif_data/"+dataTanggal()+"/isi_pesan").setValue(dataNotifikasi);
+        databaseReference.child("notif_data/"+dataTanggal()+"/url").setValue(lokasiData);
+    }
+
     public void openMapsActivity(){
         Intent intent = new Intent(this, MapsActivity.class);
         startActivity(intent);
@@ -368,11 +524,16 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if(keyCode == KeyEvent.KEYCODE_BACK){
-            finish();
-        }
-        return super.onKeyDown(keyCode,event);
+    public void openNotifActivity(){
+        Intent intent = new Intent(this, NotifActivity.class);
+        startActivity(intent);
     }
+
+//    @Override
+//    public boolean onKeyDown(int keyCode, KeyEvent event) {
+//        if(keyCode == KeyEvent.KEYCODE_BACK){
+//            finish();
+//        }
+//        return super.onKeyDown(keyCode,event);
+//    }
 }

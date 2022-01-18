@@ -24,7 +24,7 @@
             android:layout_marginLeft="30dp"
             android:layout_marginTop="15dp"
             android:fontFamily="@font/montserratsemibold"
-            android:text="Scan Fingerprint"
+            android:text="Scan Sidik Jari"
             android:textSize="20sp" />
 
         <TextView
@@ -84,7 +84,7 @@
             android:layout_marginLeft="30dp"
             android:layout_marginTop="15dp"
             android:fontFamily="@font/montserratsemibold"
-            android:text="Scan Fingerprint"
+            android:text="Scan Sidik Jari"
             android:textSize="20sp" />
 
         <TextView
@@ -94,7 +94,7 @@
             android:layout_marginLeft="30dp"
             android:layout_marginTop="50dp"
             android:fontFamily="@font/montserratregular"
-            android:text="Untuk melakukan scan fingerprint alat harus dalam kondisi hidup dan terkoneksi. Pastikan alat berada didekat anda serta tidak digunakan oleh pengguna"
+            android:text="Untuk melakukan scan sidik jari alat harus dalam kondisi hidup dan terkoneksi. Pastikan alat berada didekat anda serta tidak digunakan oleh pengguna"
             android:textSize="12sp" />
 
         <androidx.appcompat.widget.AppCompatButton

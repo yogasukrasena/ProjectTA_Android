@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/cardNotif"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardCornerRadius="10dp"
+    app:cardElevation="5dp"
+    android:layout_margin="5dp">
+
+    <RelativeLayout
+        android:id="@+id/notifLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/jenis_notif"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Pesan Dari Pengguna"
+            android:textSize="14sp"
+            android:fontFamily="@font/montserratsemibold"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="30dp"
+            android:layout_toEndOf="@id/notifLayout"
+            android:layout_toRightOf="@+id/notifLayout"
+            tools:ignore="NotSibling" />
+
+        <TextView
+            android:id="@+id/isi_notif"
+            android:layout_width="290dp"
+            android:layout_height="wrap_content"
+            android:linksClickable="true"
+            android:text="Pengguna meminta untuk dijemput, status lokasi perangkat.."
+            android:textSize="12sp"
+            android:fontFamily="@font/montserratregular"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="30dp"
+            android:layout_toEndOf="@id/notifLayout"
+            android:layout_toRightOf="@+id/notifLayout"
+            android:layout_below="@id/jenis_notif"
+            tools:ignore="NotSibling,SmallSp" />
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/click_maps"
+            android:layout_width="100dp"
+            android:layout_height="25dp"
+            app:cardCornerRadius="5dp"
+            app:cardBackgroundColor="@color/biru_submit"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="30dp"
+            android:layout_toEndOf="@id/notifLayout"
+            android:layout_toRightOf="@+id/notifLayout"
+            android:layout_below="@id/isi_notif"
+            tools:ignore="NotSibling">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Lokasi Perangkat"
+                android:textSize="10sp"
+                android:fontFamily="@font/montserratregular"
+                android:textColor="@color/white"
+                android:layout_gravity="center"/>
+
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:id="@+id/waktu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="15:00"
+            android:textSize="10sp"
+            android:fontFamily="@font/montserratlight"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginBottom="10dp"
+            android:layout_toEndOf="@id/notifLayout"
+            android:layout_toRightOf="@+id/notifLayout"
+            android:layout_below="@id/click_maps"
+            tools:ignore="NotSibling,SmallSp" />
+
+        <TextView
+            android:id="@+id/tanggal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="18/05/2021"
+            android:textSize="10sp"
+            android:fontFamily="@font/montserratlight"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_toEndOf="@id/waktu"
+            android:layout_toRightOf="@+id/notifLayout"
+            android:layout_below="@id/click_maps"
+            tools:ignore="NotSibling,SmallSp" />
+
+    </RelativeLayout>
+
+</androidx.cardview.widget.CardView>

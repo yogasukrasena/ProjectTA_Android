@@ -6,7 +6,7 @@
     android:orientation="vertical">
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/hapus_success"
+        android:id="@+id/popup_hapusnotif"
         android:layout_width="300dp"
         android:layout_height="180dp"
         app:cardBackgroundColor="@color/gray_status"
@@ -14,8 +14,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:visibility="gone">
+        app:layout_constraintTop_toTopOf="parent" >
 
         <TextView
             android:layout_width="wrap_content"
@@ -24,7 +23,7 @@
             android:layout_marginLeft="30dp"
             android:layout_marginTop="15dp"
             android:fontFamily="@font/montserratsemibold"
-            android:text="Hapus Sidik Jari"
+            android:text="Hapus Notifikasi"
             android:textSize="20sp" />
 
         <TextView
@@ -35,7 +34,7 @@
             android:layout_marginLeft="30dp"
             android:layout_marginTop="50dp"
             android:fontFamily="@font/montserratregular"
-            android:text="Pastikan alat berada didekat anda dan tidak digunakan oleh pengguna"
+            android:text="Apakah anda yakin untuk menghapus data notifikasi yang tersedia ?"
             android:textSize="14sp" />
 
         <androidx.appcompat.widget.AppCompatButton
@@ -63,52 +62,6 @@
             android:textColor="@color/white"
             android:textSize="10sp"
             android:fontFamily="@font/montserratbold" />
-
-    </androidx.cardview.widget.CardView>
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/hapus_dissmis"
-        android:layout_width="300dp"
-        android:layout_height="180dp"
-        app:cardBackgroundColor="@color/gray_status"
-        app:cardCornerRadius="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:visibility="gone">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="30dp"
-            android:layout_marginLeft="30dp"
-            android:layout_marginTop="15dp"
-            android:fontFamily="@font/montserratsemibold"
-            android:text="Scan Sidik Jari"
-            android:textSize="20sp" />
-
-        <TextView
-            android:layout_width="230dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="30dp"
-            android:layout_marginLeft="30dp"
-            android:layout_marginTop="50dp"
-            android:fontFamily="@font/montserratregular"
-            android:text="Untuk menghapus sidik jari alat harus dalam kondisi hidup dan terkoneksi. Pastikan alat berada didekat anda serta tidak digunakan oleh pengguna"
-            android:textSize="12sp" />
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/kembali"
-            android:layout_width="100dp"
-            android:layout_height="30dp"
-            android:layout_gravity="center"
-            android:layout_marginTop="60dp"
-            android:background="@drawable/submit_button"
-            android:text="Kembali"
-            android:textColor="@color/white"
-            android:textSize="10sp"
-            android:fontFamily="@font/montserratbold"/>
 
     </androidx.cardview.widget.CardView>
 
