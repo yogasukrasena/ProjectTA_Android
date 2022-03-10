@@ -56,11 +56,12 @@ public class MainActivity extends AppCompatActivity {
     private TextView retriveBattery;
     private ImageView imageProfile;
     private ImageView notifImage;
-    private boolean device_status = false;
     private String tanggal, waktu, notifLog;
     private String dataNotifikasi, lokasiData, statusLokasi;
     private Double gpsLat, gpsLong;
     private Integer status_device, status_gps, status_tombol, status_notif;
+    private Integer count_status = 0;
+    Handler mHandler = new Handler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,8 +86,8 @@ public class MainActivity extends AppCompatActivity {
         imageProfile = findViewById(R.id.foto_profile);
         notifImage = findViewById(R.id.notif_ada);
         //call function
-        refreshData();
         getData();
+        mStatusDevice.run();
 
         //fungsi menampilkan foto profile
         DatabaseReference dataFotoProfile = databaseReference.child("foto_profile");
@@ -176,35 +177,26 @@ public class MainActivity extends AppCompatActivity {
                 openNotifActivity();
             }
         });
+    }
 
-        final SwipeRefreshLayout pullToRefresh = findViewById(R.id.pullToRefreshMain);
-        pullToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                refreshData();
-                pullToRefresh.setRefreshing(false);
+    private Runnable mStatusDevice = new Runnable() {
+        @Override
+        public void run() {
+            count_status = count_status - 1;
+            mHandler.postDelayed(this,1000);
+            Log.d("count_data", String.valueOf(count_status));
+            if(count_status <= 0){
+                databaseReference.child("flag_status").child("status_device").setValue(0);
+                databaseReference.child("flag_status").child("status_gps").setValue(0);
+                databaseReference.child("raw_data").child("battery_level").setValue(0);
+                databaseReference.child("raw_data").child("bpm_level").setValue(0);
+                databaseReference.child("raw_data").child("spo2_level").setValue(0);
+                databaseReference.child("raw_data").child("selisih_data").setValue("00:00");
+            }else if(count_status>0){
+                databaseReference.child("flag_status").child("status_device").setValue(1);
             }
-        });
-    }
-    //fungsi untuk melakukan refresh data
-    public void refreshData(){
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            public void run() {
-                if(device_status){
-                    device_status = false;
-                    databaseReference.child("flag_status").child("status_device").setValue(0);
-                    databaseReference.child("flag_status").child("status_gps").setValue(0);
-                    databaseReference.child("raw_data").child("battery_level").setValue(0);
-                    databaseReference.child("raw_data").child("bpm_level").setValue(0);
-                    databaseReference.child("raw_data").child("spo2_level").setValue(0);
-                    databaseReference.child("raw_data").child("selisih_data").setValue("00:00");
-                }else{
-                    handler.postDelayed(this, 100);
-                }
-            }
-        },100);
-    }
+        }
+    };
 
     //fungsi mengambil foto profile default ketika belum ada foto yg diupload
     public int getDefaultImage(String imageName){
@@ -232,7 +224,6 @@ public class MainActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(snapshot.exists()){
                     //parameter penentu status device dan gps
-                    device_status = true;
                     status_device = snapshot.child("status_device").getValue(Integer.class);
                     status_gps = snapshot.child("status_gps").getValue(Integer.class);
                     status_tombol = snapshot.child("status_button").getValue(Integer.class);
@@ -327,9 +318,9 @@ public class MainActivity extends AppCompatActivity {
                         String namakey = user.getKey();
                         child_terbaru = namakey;
                     }
-                    Log.d("namaLog", child_terbaru);
                     waktu_mulai = snapshot.child(child_terbaru+"/waktu_mulai").getValue(String.class);
                     waktu_berjalan = snapshot.child(child_terbaru+"/waktu_berjalan").getValue(String.class);
+                    count_status = 70;
                     Date jam_mulai = null;
                     Date jam_berjalan = null;
                     try {
@@ -353,11 +344,10 @@ public class MainActivity extends AppCompatActivity {
                     count_waktu = String.format("%02d:%02d",hours,min);
 
                     //upload data kalkulasi selisih runing time alat ke dalam firebase
-                    dataLog.child(child_terbaru+"/selisih_waktu").setValue(count_waktu);
+                    dataRaw.child("selisih_data").setValue(count_waktu);
+
                     //menampilkan data selisih pada halaman utama
-                    if(status_device == 1){
-                        dataRaw.child("selisih_data").setValue(count_waktu);
-                    }
+                    dataLog.child(child_terbaru+"/selisih_waktu").setValue(count_waktu);
                 }
             }
 
