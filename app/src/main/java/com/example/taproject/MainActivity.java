@@ -178,13 +178,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
+    //fungsi untuk menentukan status perangkat terkoneksi atau tidak
     private Runnable mStatusDevice = new Runnable() {
         @Override
         public void run() {
-            count_status = count_status - 1;
-            mHandler.postDelayed(this,1000);
-            Log.d("count_data", String.valueOf(count_status));
+            count_status = count_status - 1; //mengurangi nilai count status = 70 setiap menitnya
+            mHandler.postDelayed(this,1000); //fungsi berjalan tiap satu detik
+            //kondisi jika nilai dari count status kurang dari 0 perangkat dianggap terputus
             if(count_status <= 0){
                 databaseReference.child("flag_status").child("status_device").setValue(0);
                 databaseReference.child("flag_status").child("status_gps").setValue(0);
@@ -236,6 +236,9 @@ public class MainActivity extends AppCompatActivity {
                     }else{
                         retriveStatusDevice.setText(getString(R.string.disconect));
                         retriveStatusDevice.setTextColor(getColor(R.color.disconnect));
+                        if(count_status == 0){
+                            notificationStatusPerangkat();
+                        }
                     }
                     //status gps
                     if(status_gps == 1){
@@ -286,11 +289,11 @@ public class MainActivity extends AppCompatActivity {
                     if(baterai_value == 20 || baterai_value == 10){
                         dataNotifikasi = "Baterai perangkat lemah, sisa: "+baterai_value+"%. Status lokasi perangkat adalah : "+statusLokasi+
                                 "Klik untuk melihat lokasi terakhir perangkat.";
-                        notificationPerangkat();
+                        notificationBateraiPerangkat();
                     }else if(baterai_value == 5 || baterai_value <= 3 && baterai_value > 0){
                         dataNotifikasi = "Baterai perangkat habis, sisa: "+baterai_value+"%. Status lokasi perangkat adalah : "+statusLokasi+
                                 "Klik untuk melihat lokasi terakhir perangkat.";
-                        notificationPerangkat();
+                        notificationBateraiPerangkat();
                     }
                     //menampilkan data pada menu home
                     retriveBattery.setText(Integer.toString(baterai_value));
@@ -391,6 +394,54 @@ public class MainActivity extends AppCompatActivity {
         return notifLog;
     }
 
+    public void notificationStatusPerangkat(){
+        //menentukan data dalam notifikasi
+        String judulNotif = "Pesan Dari Perangkat";
+        dataNotifikasi = "Perangkat Tidak Terkoneksi. Status lokasi perangkat adalah : "+statusLokasi+
+                "Klik untuk melihat lokasi terakhir perangkat.";
+
+        //fungsi akses menu dari notifikasi
+        Intent intent = new Intent(this, NotifActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this,0, intent, PendingIntent.FLAG_ONE_SHOT);
+        //build notifikasi yang ditampilkan
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            NotificationChannel channel = new NotificationChannel("n","n", NotificationManager.IMPORTANCE_HIGH);
+            channel.enableLights(true);
+            channel.enableVibration(true);
+            channel.setLightColor(R.color.white);
+            channel.setDescription(judulNotif);
+
+            NotificationManager manager = getSystemService(NotificationManager.class);
+            manager.createNotificationChannel(channel);
+        }
+        //menentukan suara dan getaran notifikasi masuk
+        Uri uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        long[] vibrate = {500,500};
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this,"n")
+                .setSmallIcon(R.mipmap.blind_stick)
+                .setContentTitle(judulNotif)
+                .setContentText("Perangkat Terputus")
+                .setStyle(new NotificationCompat.BigTextStyle().bigText(dataNotifikasi))
+                .setAutoCancel(true)
+                .setSound(uri)
+                .setVibrate(vibrate)
+                .setPriority(NotificationCompat.PRIORITY_MAX)
+                .setContentIntent(pendingIntent);
+
+        NotificationManagerCompat managerCompat = NotificationManagerCompat.from(this);
+        managerCompat.notify(1, builder.build());
+
+        //mengirimkan data notifikasi kedalam firebase
+        databaseReference.child("flag_status/status_notifikasi").setValue(1);
+        databaseReference.child("notif_data/"+dataTanggal()+"/jenis_pesan").setValue(judulNotif);
+        databaseReference.child("notif_data/"+dataTanggal()+"/tanggal").setValue(tanggal);
+        databaseReference.child("notif_data/"+dataTanggal()+"/waktu").setValue(waktu);
+        databaseReference.child("notif_data/"+dataTanggal()+"/isi_pesan").setValue(dataNotifikasi);
+        databaseReference.child("notif_data/"+dataTanggal()+"/url").setValue(lokasiData);
+    }
+
     public void notificationPengguna(){
         //menentukan data dalam notifikasi
         String judulNotif = "Pesan Dari Pengguna";
@@ -428,7 +479,7 @@ public class MainActivity extends AppCompatActivity {
                 .setContentIntent(pendingIntent);
 
         NotificationManagerCompat managerCompat = NotificationManagerCompat.from(this);
-        managerCompat.notify(1, builder.build());
+        managerCompat.notify(2, builder.build());
 
         //mengirimkan data notifikasi kedalam firebase
         databaseReference.child("flag_status/status_notifikasi").setValue(1);
@@ -439,7 +490,7 @@ public class MainActivity extends AppCompatActivity {
         databaseReference.child("notif_data/"+dataTanggal()+"/url").setValue(lokasiData);
     }
 
-    public void notificationPerangkat(){
+    public void notificationBateraiPerangkat(){
         //menentukan isi dan judul pesan
         String judulPesan = "Pesan Dari Perangkat";
         //fungsi akses menu dari notifikasi
@@ -473,7 +524,7 @@ public class MainActivity extends AppCompatActivity {
                 .setContentIntent(pendingIntent);
 
         NotificationManagerCompat managerCompat = NotificationManagerCompat.from(this);
-        managerCompat.notify(2, builder.build());
+        managerCompat.notify(3, builder.build());
 
         //mengirimkan data notifikasi kedalam firebase
         databaseReference.child("flag_status/status_notifikasi").setValue(1);
