@@ -137,10 +137,8 @@ public class FinggerActivity extends AppCompatActivity implements OnImageClickLi
                         } else {
                             lastFingerId = Integer.parseInt(add) + 1;
                         }
-                        Log.d("dataSpace", String.valueOf(lastFingerId));
                     }
                     rollFingerId = "enfinger" + lastFingerId.toString();
-                    Log.d("dataRoll", rollFingerId);
                 }else{
                     noData.setVisibility(View.VISIBLE);
                 }

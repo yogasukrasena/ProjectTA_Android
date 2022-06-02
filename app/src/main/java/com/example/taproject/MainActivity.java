@@ -61,7 +61,6 @@ public class MainActivity extends AppCompatActivity {
     private Double gpsLat, gpsLong;
     private Integer status_device, status_gps, status_tombol, status_notif;
     private Integer count_status = 0;
-    Handler mHandler = new Handler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -178,12 +177,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
     //fungsi untuk menentukan status perangkat terkoneksi atau tidak
-    private Runnable mStatusDevice = new Runnable() {
+    public Handler mHandler = new Handler();
+    Runnable mStatusDevice = new Runnable() {
         @Override
         public void run() {
             count_status = count_status - 1; //mengurangi nilai count status = 70 setiap menitnya
-            mHandler.postDelayed(this,1000); //fungsi berjalan tiap satu detik
+            mHandler.postDelayed(mStatusDevice,1000); //fungsi berjalan tiap satu detik
             //kondisi jika nilai dari count status kurang dari 0 perangkat dianggap terputus
             if(count_status <= 0){
                 databaseReference.child("flag_status").child("status_device").setValue(0);
@@ -192,7 +193,12 @@ public class MainActivity extends AppCompatActivity {
                 databaseReference.child("raw_data").child("bpm_level").setValue(0);
                 databaseReference.child("raw_data").child("spo2_level").setValue(0);
                 databaseReference.child("raw_data").child("selisih_data").setValue("00:00");
-            }else if(count_status>0){
+                if(count_status == 0){
+                    notificationStatusPerangkat();
+                    count_status = -5;
+                }
+                mHandler.removeCallbacks(mStatusDevice);
+            }else{
                 databaseReference.child("flag_status").child("status_device").setValue(1);
             }
         }
@@ -211,7 +217,6 @@ public class MainActivity extends AppCompatActivity {
             Glide.with(getApplicationContext()).load(getDefaultImage("man")).into(imageView);
         }else{
             Glide.with(getApplicationContext()).load(dataFotoRef).into(imageView);
-            Log.d("getFoto", String.valueOf(dataFotoRef));
         }
     }
 
@@ -228,38 +233,36 @@ public class MainActivity extends AppCompatActivity {
                     status_gps = snapshot.child("status_gps").getValue(Integer.class);
                     status_tombol = snapshot.child("status_button").getValue(Integer.class);
                     status_notif = snapshot.child("status_notifikasi").getValue(Integer.class);
-                    //status alat
-                    if(status_device == 1){
-                        //menampilkan status connect serta kalkulasi selisih waktu pada halaman home
-                        retriveStatusDevice.setText(getString(R.string.connect));
-                        retriveStatusDevice.setTextColor(getColor(R.color.connect));
-                    }else{
-                        retriveStatusDevice.setText(getString(R.string.disconect));
-                        retriveStatusDevice.setTextColor(getColor(R.color.disconnect));
-                        if(count_status == 0){
-                            notificationStatusPerangkat();
-                        }
-                    }
-                    //status gps
-                    if(status_gps == 1){
-                        retriveStatusGps.setText(getString(R.string.connect));
-                        retriveStatusGps.setTextColor(getColor(R.color.connect));
-                        statusLokasi = "Terkoneksi. ";
-                    }else{
-                        retriveStatusGps.setText(getString(R.string.disconect));
-                        retriveStatusGps.setTextColor(getColor(R.color.disconnect));
-                        statusLokasi = "Tidak Terkoneksi. ";
-                    }
-                    //status tombol notifikasi
-                    if(status_tombol == 5){
-                        notificationPengguna();
-                    }
-                    //tanda notifikasi
-                    if(status_notif == 1){
-                        notifImage.setVisibility(View.VISIBLE);
-                    }else{
-                        notifImage.setVisibility(View.GONE);
-                    }
+                }
+                //status alat
+                if(status_device == 1){
+                    mStatusDevice.run();
+                    //menampilkan status connect serta kalkulasi selisih waktu pada halaman home
+                    retriveStatusDevice.setText(getString(R.string.connect));
+                    retriveStatusDevice.setTextColor(getColor(R.color.connect));
+                }else{
+                    retriveStatusDevice.setText(getString(R.string.disconect));
+                    retriveStatusDevice.setTextColor(getColor(R.color.disconnect));
+                }
+                //status gps
+                if(status_gps == 1){
+                    retriveStatusGps.setText(getString(R.string.connect));
+                    retriveStatusGps.setTextColor(getColor(R.color.connect));
+                    statusLokasi = "Terkoneksi. ";
+                }else{
+                    retriveStatusGps.setText(getString(R.string.disconect));
+                    retriveStatusGps.setTextColor(getColor(R.color.disconnect));
+                    statusLokasi = "Tidak Terkoneksi. ";
+                }
+                //status tombol notifikasi
+                if(status_tombol == 5){
+                    notificationPengguna();
+                }
+                //tanda notifikasi
+                if(status_notif == 1){
+                    notifImage.setVisibility(View.VISIBLE);
+                }else{
+                    notifImage.setVisibility(View.GONE);
                 }
             }
 
@@ -323,7 +326,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                     waktu_mulai = snapshot.child(child_terbaru+"/waktu_mulai").getValue(String.class);
                     waktu_berjalan = snapshot.child(child_terbaru+"/waktu_berjalan").getValue(String.class);
-                    count_status = 70;
+                    count_status = 120;
                     Date jam_mulai = null;
                     Date jam_berjalan = null;
                     try {
