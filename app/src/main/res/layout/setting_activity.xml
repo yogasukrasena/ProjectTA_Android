@@ -34,7 +34,7 @@
                 android:layout_width="250dp"
                 android:layout_height="50dp"
                 android:layout_marginLeft="75dp"
-                android:layout_marginTop="60dp"
+                android:layout_marginTop="50dp"
                 android:fontFamily="@font/montserratlight"
                 android:hint="Pengguna Tongkat"
                 android:inputType="text"
@@ -44,7 +44,7 @@
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:layout_marginLeft="40dp"
-                android:layout_marginTop="75dp"
+                android:layout_marginTop="65dp"
                 android:alpha="0.4"
                 android:src="@drawable/userone" />
 
@@ -53,7 +53,7 @@
                 android:layout_width="250dp"
                 android:layout_height="50dp"
                 android:layout_marginLeft="75dp"
-                android:layout_marginTop="115dp"
+                android:layout_marginTop="105dp"
                 android:fontFamily="@font/montserratlight"
                 android:hint="Keluarga"
                 android:inputType="text"
@@ -63,7 +63,7 @@
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:layout_marginLeft="40dp"
-                android:layout_marginTop="130dp"
+                android:layout_marginTop="120dp"
                 android:alpha="0.4"
                 android:src="@drawable/user" />
 
@@ -72,7 +72,7 @@
                 android:layout_width="245dp"
                 android:layout_height="40dp"
                 android:layout_marginLeft="80dp"
-                android:layout_marginTop="180dp"
+                android:layout_marginTop="170dp"
                 android:fontFamily="@font/montserratlight"
                 android:gravity="center_vertical"
                 android:text="Hapus Data Log"
@@ -82,7 +82,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="305dp"
-                android:layout_marginTop="190dp"
+                android:layout_marginTop="180dp"
                 android:fontFamily="@font/montserratlight"
                 android:text=">"
                 android:textSize="30px" />
@@ -91,7 +91,7 @@
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:layout_marginLeft="40dp"
-                android:layout_marginTop="185dp"
+                android:layout_marginTop="175dp"
                 android:alpha="0.4"
                 android:src="@drawable/delete" />
 
@@ -100,7 +100,7 @@
                 android:layout_width="245dp"
                 android:layout_height="40dp"
                 android:layout_marginLeft="80dp"
-                android:layout_marginTop="230dp"
+                android:layout_marginTop="220dp"
                 android:fontFamily="@font/montserratlight"
                 android:gravity="center_vertical"
                 android:text="@string/fingger"
@@ -110,7 +110,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="305dp"
-                android:layout_marginTop="240dp"
+                android:layout_marginTop="230dp"
                 android:fontFamily="@font/montserratlight"
                 android:text=">"
                 android:textSize="30px" />
@@ -119,9 +119,37 @@
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:layout_marginLeft="40dp"
-                android:layout_marginTop="240dp"
+                android:layout_marginTop="230dp"
                 android:alpha="0.4"
                 android:src="@drawable/fingerprint" />
+
+            <TextView
+                android:id="@+id/reset_connect"
+                android:layout_width="245dp"
+                android:layout_height="40dp"
+                android:layout_marginLeft="80dp"
+                android:layout_marginTop="270dp"
+                android:fontFamily="@font/montserratlight"
+                android:gravity="center_vertical"
+                android:text="@string/reset"
+                android:textSize="30px" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="305dp"
+                android:layout_marginTop="280dp"
+                android:fontFamily="@font/montserratlight"
+                android:text=">"
+                android:textSize="30px" />
+
+            <ImageView
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_marginLeft="40dp"
+                android:layout_marginTop="280dp"
+                android:alpha="0.4"
+                android:src="@drawable/wifi" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/submit"
@@ -129,7 +157,7 @@
                 android:layout_height="40dp"
                 android:layout_marginLeft="50dp"
                 android:layout_marginStart="50dp"
-                android:layout_marginTop="290dp"
+                android:layout_marginTop="330dp"
                 android:background="@drawable/submit_button"
                 android:text="@string/simpan"
                 android:textColor="@color/white"
@@ -140,7 +168,7 @@
                 android:layout_width="120dp"
                 android:layout_height="40dp"
                 android:layout_marginLeft="190dp"
-                android:layout_marginTop="290dp"
+                android:layout_marginTop="330dp"
                 android:background="@drawable/cancel_button"
                 android:text="@string/batal"
                 android:textColor="@color/white"
@@ -148,24 +176,24 @@
 
             <ImageView
                 android:id="@+id/arduino_logo"
-                android:layout_width="50dp"
-                android:layout_height="30dp"
+                android:layout_width="30dp"
+                android:layout_height="20dp"
                 android:layout_marginStart="185dp"
                 android:layout_marginLeft="185dp"
-                android:layout_marginTop="355dp"
+                android:layout_marginTop="380dp"
                 android:src="@drawable/arduino_logo" />
 
             <TextView
                 android:id="@+id/text_power"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="115dp"
-                android:layout_marginLeft="115dp"
-                android:layout_marginTop="360dp"
+                android:layout_marginStart="120dp"
+                android:layout_marginLeft="120dp"
+                android:layout_marginTop="383dp"
                 android:fontFamily="@font/montserratregular"
                 android:text="@string/powerby"
                 android:textColor="@color/gray_pekat"
-                android:textSize="12sp" />
+                android:textSize="10sp" />
 
         </androidx.cardview.widget.CardView>
     </FrameLayout>

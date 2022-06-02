@@ -59,7 +59,8 @@ public class MainActivity extends AppCompatActivity {
     private String tanggal, waktu, notifLog;
     private String dataNotifikasi, lokasiData, statusLokasi;
     private Double gpsLat, gpsLong;
-    private Integer status_device, status_gps, status_tombol, status_notif;
+    private Integer status_device, status_gps;
+    private Integer status_conn, status_tombol, status_notif;
     private Integer count_status = 0;
 
     @Override
@@ -186,7 +187,7 @@ public class MainActivity extends AppCompatActivity {
             count_status = count_status - 1; //mengurangi nilai count status = 70 setiap menitnya
             mHandler.postDelayed(mStatusDevice,1000); //fungsi berjalan tiap satu detik
             //kondisi jika nilai dari count status kurang dari 0 perangkat dianggap terputus
-            if(count_status <= 0){
+            if(count_status <= 0 || status_conn == 0){
                 databaseReference.child("flag_status").child("status_device").setValue(0);
                 databaseReference.child("flag_status").child("status_gps").setValue(0);
                 databaseReference.child("raw_data").child("battery_level").setValue(0);
@@ -233,6 +234,7 @@ public class MainActivity extends AppCompatActivity {
                     status_gps = snapshot.child("status_gps").getValue(Integer.class);
                     status_tombol = snapshot.child("status_button").getValue(Integer.class);
                     status_notif = snapshot.child("status_notifikasi").getValue(Integer.class);
+                    status_conn = snapshot.child("status_koneksi").getValue(Integer.class);
                 }
                 //status alat
                 if(status_device == 1){

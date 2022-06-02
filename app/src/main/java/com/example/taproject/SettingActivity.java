@@ -68,13 +68,19 @@ public class SettingActivity extends AppCompatActivity {
     private CardView uploadCardview;
     private ImageView imageContainer;
     private CardView progressCard;
+    private CardView connSuccess;
+    private CardView connDissmis;
     private ProgressBar progressUpload;
 
     //deklarasi elemen lainnya
     private TextView hapusLog;
+    private TextView fingerMenu;
+    private TextView resetConn;
     private AppCompatButton submit_hapuslog;
     private AppCompatButton cancel_hapuslog;
-    private TextView fingerMenu;
+    private AppCompatButton submit_resetcon;
+    private AppCompatButton cancel_resetcon;
+    private AppCompatButton kembali_resetcon;
     private AppCompatButton submit;
     private AppCompatButton cancel;
     private ImageView fotoProfile;
@@ -82,8 +88,10 @@ public class SettingActivity extends AppCompatActivity {
     //Kode permintaan untuk memilih metode pengambilan gamabr
     private static final int REQUEST_CODE_CAMERA = 1;
     private static final int REQUEST_CODE_GALLERY = 2;
+    private Integer statusAlat;
     Dialog uploadFoto;
     Dialog hapusLogAll;
+    Dialog resetConnection;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,6 +113,7 @@ public class SettingActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(snapshot.exists()) {
                     linkFoto = snapshot.child("foto_profile").getValue(String.class);
+                    statusAlat = snapshot.child("flag_status").child("status_device").getValue(Integer.class);
                     showProfile(fotoProfile, linkFoto);
                 }
             }
@@ -136,6 +145,15 @@ public class SettingActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 openFinggerPrint();
+            }
+        });
+
+        //onclik reset koneksi
+        resetConn = (TextView) findViewById(R.id.reset_connect);
+        resetConn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                resetKoneksi();
             }
         });
 
@@ -360,6 +378,53 @@ public class SettingActivity extends AppCompatActivity {
                         Toast.makeText(SettingActivity.this, "Foto profile sebelumnya gagal dihapus", Toast.LENGTH_SHORT).show();
                     }
                 };databaseReference.addListenerForSingleValueEvent(getDataFoto);
+            }
+        });
+    }
+
+    public void resetKoneksi(){
+        resetConnection = new Dialog(this);
+        resetConnection.setContentView(R.layout.popup_resetconn);
+        resetConnection.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        resetConnection.show();
+
+        //pengambilan jenis dialog pada xml
+        connSuccess = resetConnection.findViewById(R.id.reset_success);
+        connDissmis = resetConnection.findViewById(R.id.reset_dissmis);
+
+        //cek kondisi koneksi untuk menentukan menu action
+        if(statusAlat == 0){
+            connDissmis.setVisibility(View.VISIBLE);
+        }else{
+            connSuccess.setVisibility(View.VISIBLE);
+        }
+
+        //action ketika di submit
+        submit_resetcon = resetConnection.findViewById(R.id.lanjutkan);
+        submit_resetcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                databaseReference.child("flag_status").child("status_koneksi").setValue(0);//set status koneksi menjadi tidak terkoneks/0
+//                databaseReference.child("flag_status").child("status_device").setValue(0);//set status koneksi menjadi tidak terkoneks/0
+//                databaseReference.child("flag_status").child("status_gps").setValue(0);//set status koneksi menjadi tidak terkoneks/0
+                resetConnection.dismiss();
+                Toast.makeText(SettingActivity.this, "Perangkat dalam proses reset koneksi", Toast.LENGTH_SHORT).show();
+            }
+        });
+        //action ketika batal
+        cancel_resetcon = resetConnection.findViewById(R.id.cancel);
+        cancel_resetcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                resetConnection.dismiss();
+            }
+        });
+        //action ketika batal
+        kembali_resetcon = resetConnection.findViewById(R.id.kembali);
+        kembali_resetcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                resetConnection.dismiss();
             }
         });
     }
